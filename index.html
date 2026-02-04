@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AminLogic QR Code Tools</title>
+
+  <style>
+    :root {
+      --bg1: #0b1220;
+      --bg2: #111c33;
+      --glass: rgba(255,255,255,0.06);
+      --glass2: rgba(255,255,255,0.09);
+      --stroke: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.55);
+
+      --blue: #4ea8ff;
+      --green: #46ffb3;
+      --red: #ff5a7a;
+      --yellow: #ffd66b;
+
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1a2b52 0%, var(--bg1) 45%, #070b14 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .container {
+      padding: 14px;
+      padding-bottom: 90px;
+      max-width: 520px;
+      margin: auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--stroke);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      margin-bottom: 14px;
+    }
+
+    .app-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .app-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+    }
+
+    .title-text h1 {
+      font-size: 16px;
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .title-text p {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(78,168,255,0.14);
+      border: 1px solid rgba(78,168,255,0.22);
+      color: rgba(220,240,255,0.95);
+      font-weight: 700;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+      margin-bottom: 14px;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .card p {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.22);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: none;
+      min-height: 90px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      padding: 13px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      flex: 1;
+      min-width: 130px;
+      transition: 0.2s;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .btn-blue {
+      background: linear-gradient(135deg, rgba(78,168,255,0.95), rgba(78,168,255,0.55));
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(78,168,255,0.25);
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, rgba(70,255,179,0.95), rgba(70,255,179,0.55));
+      color: #052014;
+      box-shadow: 0 10px 20px rgba(70,255,179,0.20);
+    }
+
+    .btn-red {
+      background: linear-gradient(135deg, rgba(255,90,122,0.95), rgba(255,90,122,0.55));
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(255,90,122,0.22);
+    }
+
+    .btn-dark {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.85);
+    }
+
+    .qr-box {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.20);
+    }
+
+    #qrcode canvas {
+      border-radius: 12px;
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .tabs {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(8,12,20,0.82);
+      backdrop-filter: blur(18px);
+      border-top: 1px solid rgba(255,255,255,0.10);
+      padding: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      z-index: 999;
+    }
+
+    .tab-btn {
+      flex: 1;
+      max-width: 180px;
+      padding: 12px;
+      border-radius: 18px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.65);
+      transition: 0.2s;
+    }
+
+    .tab-btn.active {
+      background: rgba(78,168,255,0.16);
+      border: 1px solid rgba(78,168,255,0.22);
+      color: rgba(255,255,255,0.92);
+      box-shadow: 0 10px 22px rgba(78,168,255,0.12);
+    }
+
+    .history-item {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      margin-top: 12px;
+    }
+
+    .history-item strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .history-item span {
+      font-size: 12px;
+      color: var(--muted);
+      word-break: break-word;
+    }
+
+    .history-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .history-actions button {
+      flex: 1;
+      min-width: unset;
+      padding: 10px;
+      border-radius: 14px;
+      font-size: 12px;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.25);
+      margin-top: 14px;
+    }
+
+    .scan-result {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.18);
+    }
+
+    .scan-result h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .scan-result p {
+      margin: 8px 0 0;
+      font-size: 13px;
+      color: rgba(255,255,255,0.82);
+      word-break: break-word;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      margin-top: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="app-title">
+        <img src="icon-512.png" class="app-icon" alt="AminLogic Icon" />
+        <div class="title-text">
+          <h1>AminLogic QR Code Tools</h1>
+          <p>Generate • Scan • Save History</p>
+        </div>
+      </div>
+      <div class="badge" id="statusBadge">Ready</div>
+    </div>
+
+    <!-- GENERATOR TAB -->
+    <div id="tabGenerator" class="tab-content">
+
+      <div class="card">
+        <h2>QR Code Generator</h2>
+        <p>Create QR codes instantly and save them in your history.</p>
+
+        <div class="row">
+          <textarea id="qrText" placeholder="Enter text, URL, phone number, WiFi password, etc..."></textarea>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-blue" onclick="generateQR()">Generate</button>
+          <button class="btn-dark" onclick="clearGenerator()">Clear</button>
+        </div>
+
+        <div class="qr-box">
+          <div id="qrcode"></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-green" onclick="saveQR()">Save to History</button>
+          <button class="btn-dark" onclick="copyText()">Copy Text</button>
+        </div>
+
+        <div class="small">Works offline • Stored locally on your phone</div>
+      </div>
+
+    </div>
+
+    <!-- SCANNER TAB -->
+    <div id="tabScanner" class="tab-content" style="display:none;">
+
+      <div class="card">
+        <h2>QR Code Reader</h2>
+        <p>Scan any QR code using your camera and save results.</p>
+
+        <div class="btn-row">
+          <button class="btn-blue" onclick="startScanner()">Start Scan</button>
+          <button class="btn-red" onclick="stopScanner()">Stop</button>
+        </div>
+
+        <video id="video" autoplay playsinline></video>
+
+        <div class="scan-result">
+          <h3>Scan Result</h3>
+          <p id="scanResultText">No scan yet...</p>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-green" onclick="saveScan()">Save Result</button>
+          <button class="btn-dark" onclick="copyScan()">Copy</button>
+        </div>
+
+        <div class="small">Tip: Allow camera permission in Kodular</div>
+      </div>
+
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div id="tabHistory" class="tab-content" style="display:none;">
+
+      <div class="card">
+        <h2>History</h2>
+        <p>Your saved QR codes and scan results.</p>
+
+        <div class="btn-row">
+          <button class="btn-red" onclick="clearHistory()">Clear All</button>
+        </div>
+
+        <div id="historyList"></div>
+
+        <div class="footer-note">AminLogic • Stored locally only</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="tabs">
+    <div class="tab-btn active" id="btnGenerator" onclick="switchTab('generator')">Generator</div>
+    <div class="tab-btn" id="btnScanner" onclick="switchTab('scanner')">Scanner</div>
+    <div class="tab-btn" id="btnHistory" onclick="switchTab('history')">History</div>
+  </div>
+
+  <!-- QR CODE LIBRARY -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- QR SCANNER LIBRARY -->
+  <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
+
+  <script>
+    let qr;
+    let videoStream = null;
+    let scanning = false;
+    let scanLoopInterval = null;
+
+    const statusBadge = document.getElementById("statusBadge");
+
+    function setStatus(text) {
+      statusBadge.innerText = text;
+    }
+
+    // Default QR
+    window.onload = function() {
+      qr = new QRCode(document.getElementById("qrcode"), {
+        text: "https://aminlogic.com",
+        width: 220,
+        height: 220,
+        colorDark: "#ffffff",
+        colorLight: "transparent",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      loadHistory();
+    };
+
+    // TAB SWITCH
+    function switchTab(tab) {
+      document.getElementById("tabGenerator").style.display = "none";
+      document.getElementById("tabScanner").style.display = "none";
+      document.getElementById("tabHistory").style.display = "none";
+
+      document.getElementById("btnGenerator").classList.remove("active");
+      document.getElementById("btnScanner").classList.remove("active");
+      document.getElementById("btnHistory").classList.remove("active");
+
+      if (tab === "generator") {
+        document.getElementById("tabGenerator").style.display = "block";
+        document.getElementById("btnGenerator").classList.add("active");
+        setStatus("Generator");
+      }
+
+      if (tab === "scanner") {
+        document.getElementById("tabScanner").style.display = "block";
+        document.getElementById("btnScanner").classList.add("active");
+        setStatus("Scanner");
+      }
+
+      if (tab === "history") {
+        document.getElementById("tabHistory").style.display = "block";
+        document.getElementById("btnHistory").classList.add("active");
+        setStatus("History");
+        loadHistory();
+      }
+    }
+
+    // QR GENERATOR
+    function generateQR() {
+      const text = document.getElementById("qrText").value.trim();
+      if (!text) {
+        setStatus("Enter text");
+        return;
+      }
+
+      document.getElementById("qrcode").innerHTML = "";
+      qr = new QRCode(document.getElementById("qrcode"), {
+        text: text,
+        width: 220,
+        height: 220,
+        colorDark: "#ffffff",
+        colorLight: "transparent",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      setStatus("Generated");
+    }
+
+    function clearGenerator() {
+      document.getElementById("qrText").value = "";
+      document.getElementById("qrcode").innerHTML = "";
+      setStatus("Cleared");
+    }
+
+    function copyText() {
+      const text = document.getElementById("qrText").value.trim();
+      if (!text) {
+        setStatus("Nothing to copy");
+        return;
+      }
+      navigator.clipboard.writeText(text);
+      setStatus("Copied");
+    }
+
+    function saveQR() {
+      const text = document.getElementById("qrText").value.trim();
+      if (!text) {
+        setStatus("Nothing to save");
+        return;
+      }
+
+      let history = JSON.parse(localStorage.getItem("aminlogic_qr_history") || "[]");
+
+      history.unshift({
+        type: "Generated",
+        value: text,
+        time: new Date().toLocaleString()
+      });
+
+      localStorage.setItem("aminlogic_qr_history", JSON.stringify(history));
+      setStatus("Saved");
+    }
+
+    // QR SCANNER
+    async function startScanner() {
+      try {
+        const video = document.getElementById("video");
+
+        videoStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "environment" }
+        });
+
+        video.srcObject = videoStream;
+        scanning = true;
+        setStatus("Scanning...");
+
+        scanLoopInterval = setInterval(scanFrame, 500);
+
+      } catch (err) {
+        setStatus("Camera blocked");
+        document.getElementById("scanResultText").innerText = "Camera permission is required.";
+      }
+    }
+
+    function stopScanner() {
+      scanning = false;
+      setStatus("Stopped");
+
+      if (scanLoopInterval) {
+        clearInterval(scanLoopInterval);
+        scanLoopInterval = null;
+      }
+
+      if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        videoStream = null;
+      }
+
+      document.getElementById("video").srcObject = null;
+    }
+
+    function scanFrame() {
+      if (!scanning) return;
+
+      const video = document.getElementById("video");
+
+      if (video.readyState !== video.HAVE_ENOUGH_DATA) return;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+      if (code) {
+        document.getElementById("scanResultText").innerText = code.data;
+        setStatus("QR Found!");
+      }
+    }
+
+    function saveScan() {
+      const result = document.getElementById("scanResultText").innerText.trim();
+
+      if (!result || result === "No scan yet..." || result.includes("permission")) {
+        setStatus("Nothing to save");
+        return;
+      }
+
+      let history = JSON.parse(localStorage.getItem("aminlogic_qr_history") || "[]");
+
+      history.unshift({
+        type: "Scanned",
+        value: result,
+        time: new Date().toLocaleString()
+      });
+
+      localStorage.setItem("aminlogic_qr_history", JSON.stringify(history));
+      setStatus("Saved");
+    }
+
+    function copyScan() {
+      const result = document.getElementById("scanResultText").innerText.trim();
+      if (!result || result === "No scan yet...") {
+        setStatus("Nothing to copy");
+        return;
+      }
+      navigator.clipboard.writeText(result);
+      setStatus("Copied");
+    }
+
+    // HISTORY
+    function loadHistory() {
+      const historyList = document.getElementById("historyList");
+      historyList.innerHTML = "";
+
+      let history = JSON.parse(localStorage.getItem("aminlogic_qr_history") || "[]");
+
+      if (history.length === 0) {
+        historyList.innerHTML = `<p style="color: rgba(255,255,255,0.55); margin-top: 12px;">No saved items yet.</p>`;
+        return;
+      }
+
+      history.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+
+        div.innerHTML = `
+          <strong>${item.type} • ${item.time}</strong>
+          <span>${item.value}</span>
+
+          <div class="history-actions">
+            <button class="btn-dark" onclick="copyHistory(${index})">Copy</button>
+            <button class="btn-red" onclick="deleteHistory(${index})">Delete</button>
+          </div>
+        `;
+
+        historyList.appendChild(div);
+      });
+    }
+
+    function copyHistory(index) {
+      let history = JSON.parse(localStorage.getItem("aminlogic_qr_history") || "[]");
+      navigator.clipboard.writeText(history[index].value);
+      setStatus("Copied");
+    }
+
+    function deleteHistory(index) {
+      let history = JSON.parse(localStorage.getItem("aminlogic_qr_history") || "[]");
+      history.splice(index, 1);
+      localStorage.setItem("aminlogic_qr_history", JSON.stringify(history));
+      loadHistory();
+      setStatus("Deleted");
+    }
+
+    function clearHistory() {
+      localStorage.removeItem("aminlogic_qr_history");
+      loadHistory();
+      setStatus("Cleared");
+    }
+  </script>
+
+</body>
+</html>
