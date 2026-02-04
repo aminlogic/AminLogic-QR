@@ -1,56 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AminLogic QR Master</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>AminLogic QR Tools</title>
+
 <style>
 :root {
-  --bg1: #0b1220; --bg2: #111c33; --text: #fff; --muted: rgba(255,255,255,0.55);
-  --blue: #4ea8ff; --green: #46ffb3; --red: #ff5a7a; --radius: 18px;
+  --bg1: #0b1220;
+  --bg2: #111c33;
+  --text: #fff;
+  --muted: rgba(255,255,255,0.55);
+  --blue: #4ea8ff;
+  --green: #46ffb3;
+  --red: #ff5a7a;
+  --radius: 18px;
 }
-* { box-sizing:border-box; font-family:Arial,sans-serif; }
-body { margin:0; padding:0; min-height:100vh; background:radial-gradient(circle at top, #1a2b52 0%, var(--bg1) 45%, #070b14 100%); color:var(--text); }
-.container { padding:16px; max-width:520px; margin:auto; padding-bottom:90px; }
-.topbar { display:flex; justify-content:space-between; align-items:center; padding:12px; border-radius:var(--radius); background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); }
-.app-title { display:flex; align-items:center; gap:12px; }
-.app-icon { width:46px; height:46px; border-radius:14px; }
-.title-text h1 { margin:0; font-size:16px; font-weight:800; }
-.title-text p { margin:2px 0 0; font-size:12px; color:var(--muted); }
-.badge { padding:6px 12px; border-radius:999px; background:rgba(78,168,255,0.14); font-size:12px; color:#fff; font-weight:700; }
 
-.card { background:rgba(255,255,255,0.05); border-radius:var(--radius); padding:18px; margin-bottom:14px; }
-.card h2 { margin:0 0 6px 0; font-size:16px; font-weight:800; }
-.card p { margin:0; font-size:13px; color:var(--muted); }
-
-.row { display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
-textarea { width:100%; padding:12px; border-radius:14px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.2); color:var(--text); outline:none; min-height:90px; }
-
-.btn-row { display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
-button { flex:1; min-width:130px; padding:12px; border-radius:16px; border:none; font-weight:800; cursor:pointer; transition:0.2s; }
-button:active { transform:scale(0.97); }
-.btn-blue { background:linear-gradient(135deg, rgba(78,168,255,0.95), rgba(78,168,255,0.55)); color:#fff; }
-.btn-green { background:linear-gradient(135deg, rgba(70,255,179,0.95), rgba(70,255,179,0.55)); color:#052014; }
-.btn-red { background:linear-gradient(135deg, rgba(255,90,122,0.95), rgba(255,90,122,0.55)); color:#fff; }
-.btn-dark { background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.1); }
-
-.qr-box { margin-top:16px; display:flex; justify-content:center; align-items:center; position:relative; padding:16px; border-radius:18px; background:rgba(0,0,0,0.2); }
-.share-btn { position:absolute; bottom:8px; right:8px; padding:6px 10px; border-radius:12px; background:var(--blue); color:#fff; cursor:pointer; font-size:12px; }
-
-video { width:100%; border-radius:18px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.2); display:none; margin-top:14px; }
-
-.scan-result { margin-top:14px; padding:14px; border-radius:16px; background:rgba(0,0,0,0.18); position:relative; }
-.scan-result h3 { margin:0; font-size:14px; font-weight:900; }
-.scan-result p { margin:8px 0 0 0; font-size:13px; word-break:break-word; color:#fff; }
-
-.footer-note { text-align:center; font-size:12px; color:var(--muted); margin-top:12px; }
-
-.tabs { position:fixed; bottom:0; left:0; right:0; display:flex; justify-content:center; gap:12px; background:rgba(8,12,20,0.82); backdrop-filter:blur(18px); padding:12px; border-top:1px solid rgba(255,255,255,0.1); }
-.tab-btn { flex:1; max-width:180px; padding:12px; border-radius:18px; text-align:center; font-weight:900; cursor:pointer; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.65); }
-.tab-btn.active { background:rgba(78,168,255,0.16); border:1px solid rgba(78,168,255,0.22); color:#fff; }
-.history-item { padding:14px; border-radius:16px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); margin-top:12px; }
-.history-actions { display:flex; gap:10px; margin-top:10px; }
-.history-actions button { flex:1; min-width:unset; padding:10px; border-radius:14px; font-size:12px; }
+*{box-sizing:border-box;font-family:Arial,sans-serif;-webkit-tap-highlight-color:transparent;}
+body{margin:0;padding:0;min-height:100vh;background:radial-gradient(circle at top,#1a2b52 0%,var(--bg1) 45%,#070b14 100%);color:var(--text);overflow-x:hidden;}
+.container{padding:16px;padding-bottom:90px;max-width:520px;margin:auto;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:var(--radius);background:linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));border:1px solid rgba(255,255,255,0.10);box-shadow:0 10px 30px rgba(0,0,0,0.35);margin-bottom:14px;}
+.app-title{display:flex;align-items:center;gap:12px;}
+.app-icon{width:46px;height:46px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);box-shadow:0 8px 22px rgba(0,0,0,0.4);}
+.title-text h1{font-size:16px;margin:0;font-weight:800;}
+.title-text p{margin:2px 0 0;font-size:12px;color:var(--muted);}
+.badge{font-size:12px;padding:8px 12px;border-radius:999px;background:rgba(78,168,255,0.14);border:1px solid rgba(78,168,255,0.22);color:rgba(220,240,255,0.95);font-weight:700;}
+.card{background:linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));border:1px solid rgba(255,255,255,0.10);border-radius:var(--radius);padding:18px;box-shadow:0 10px 35px rgba(0,0,0,0.35);margin-bottom:14px;}
+.card h2{margin:0 0 6px 0;font-size:16px;font-weight:800;}
+.card p{margin:0;font-size:13px;color:var(--muted);}
+.row{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;}
+input,textarea{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.10);background:rgba(0,0,0,0.22);color:var(--text);outline:none;font-size:14px;}
+textarea{resize:none;min-height:90px;}
+.btn-row{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;}
+button{border:none;padding:13px 14px;border-radius:16px;font-size:14px;font-weight:800;cursor:pointer;flex:1;min-width:130px;transition:0.2s;}
+button:active{transform:scale(0.97);}
+.btn-blue{background:linear-gradient(135deg,rgba(78,168,255,0.95),rgba(78,168,255,0.55));color:#fff;box-shadow:0 10px 20px rgba(78,168,255,0.25);}
+.btn-green{background:linear-gradient(135deg,rgba(70,255,179,0.95),rgba(70,255,179,0.55));color:#052014;box-shadow:0 10px 20px rgba(70,255,179,0.20);}
+.btn-red{background:linear-gradient(135deg,rgba(255,90,122,0.95),rgba(255,90,122,0.55));color:#fff;box-shadow:0 10px 20px rgba(255,90,122,0.22);}
+.btn-dark{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);color:rgba(255,255,255,0.85);}
+.qr-box{margin-top:16px;display:flex;justify-content:center;align-items:center;padding:16px;border-radius:18px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.20);position:relative;}
+#qrcode canvas{border-radius:12px;}
+.share-btn{position:absolute;bottom:8px;right:8px;background:var(--blue);color:#fff;font-size:12px;padding:6px 10px;border-radius:12px;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,0.3);}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:rgba(8,12,20,0.82);backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,0.10);padding:12px;display:flex;justify-content:center;gap:12px;z-index:999;}
+.tab-btn{flex:1;max-width:180px;padding:12px;border-radius:18px;text-align:center;font-weight:900;font-size:14px;cursor:pointer;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.65);transition:0.2s;}
+.tab-btn.active{background:rgba(78,168,255,0.16);border:1px solid rgba(78,168,255,0.22);color:rgba(255,255,255,0.92);box-shadow:0 10px 22px rgba(78,168,255,0.12);}
+.history-item{padding:14px;border-radius:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);margin-top:12px;}
+.history-item strong{display:block;font-size:13px;margin-bottom:4px;}
+.history-item span{font-size:12px;color:var(--muted);word-break:break-word;}
+.history-actions{display:flex;gap:10px;margin-top:10px;}
+.history-actions button{flex:1;min-width:unset;padding:10px;border-radius:14px;font-size:12px;}
+video{width:100%;border-radius:18px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.25);margin-top:14px;display:none;}
+.scan-result{margin-top:14px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(0,0,0,0.18);position:relative;}
+.scan-result h3{margin:0;font-size:14px;font-weight:900;}
+.scan-result p{margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.82);word-break:break-word;}
+.scan-result .share-btn{bottom:8px;right:8px;}
+.footer-note{text-align:center;font-size:12px;color:var(--muted);margin-top:12px;}
 </style>
 </head>
 <body>
@@ -59,22 +64,22 @@ video { width:100%; border-radius:18px; border:1px solid rgba(255,255,255,0.1); 
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="app-title">
-    <img src="icon-512.png" class="app-icon" alt="AminLogic Icon">
+    <img src="icon-512.png" class="app-icon" alt="AminLogic Icon" />
     <div class="title-text">
-      <h1>AminLogic QR</h1>
+      <h1>AminLogic QR Tools</h1>
       <p>Generate • Scan • Share • History</p>
     </div>
   </div>
   <div class="badge" id="statusBadge">Ready</div>
 </div>
 
-<!-- GENERATOR -->
+<!-- GENERATOR TAB -->
 <div id="tabGenerator" class="tab-content">
   <div class="card">
-    <h2>QR Generator</h2>
-    <p>Enter text or URL:</p>
+    <h2>QR Code Generator</h2>
+    <p>Enter text or URL to generate a QR code.</p>
     <div class="row">
-      <textarea id="qrText" placeholder="Text, URL, WiFi, phone..."></textarea>
+      <textarea id="qrText" placeholder="Enter text, URL, phone, WiFi, etc..."></textarea>
     </div>
     <div class="btn-row">
       <button class="btn-blue" onclick="generateQR()">Generate</button>
@@ -85,18 +90,18 @@ video { width:100%; border-radius:18px; border:1px solid rgba(255,255,255,0.1); 
       <div class="share-btn" onclick="shareQR()">Share</div>
     </div>
     <div class="btn-row">
-      <button class="btn-green" onclick="saveQR()">Save History</button>
+      <button class="btn-green" onclick="saveQR()">Save to History</button>
       <button class="btn-dark" onclick="copyText()">Copy Text</button>
     </div>
     <div class="footer-note">AminLogic • QR Master Suite</div>
   </div>
 </div>
 
-<!-- SCANNER -->
+<!-- SCANNER TAB -->
 <div id="tabScanner" class="tab-content" style="display:none;">
   <div class="card">
-    <h2>QR Scanner</h2>
-    <p>Scan QR codes:</p>
+    <h2>QR Code Reader</h2>
+    <p>Scan QR codes and share or save results.</p>
     <div class="btn-row">
       <button class="btn-blue" onclick="startScanner()">Start Scan</button>
       <button class="btn-red" onclick="stopScanner()">Stop</button>
@@ -115,10 +120,11 @@ video { width:100%; border-radius:18px; border:1px solid rgba(255,255,255,0.1); 
   </div>
 </div>
 
-<!-- HISTORY -->
+<!-- HISTORY TAB -->
 <div id="tabHistory" class="tab-content" style="display:none;">
   <div class="card">
     <h2>History</h2>
+    <p>Your saved QR codes and scan results.</p>
     <div class="btn-row">
       <button class="btn-red" onclick="clearHistory()">Clear All</button>
     </div>
@@ -128,7 +134,7 @@ video { width:100%; border-radius:18px; border:1px solid rgba(255,255,255,0.1); 
 </div>
 </div>
 
-<!-- NAV -->
+<!-- BOTTOM NAV -->
 <div class="tabs">
   <div class="tab-btn active" id="btnGenerator" onclick="switchTab('generator')">Generator</div>
   <div class="tab-btn" id="btnScanner" onclick="switchTab('scanner')">Scanner</div>
@@ -137,17 +143,22 @@ video { width:100%; border-radius:18px; border:1px solid rgba(255,255,255,0.1); 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
+
 <script>
+// --- Variables ---
 let qr, videoStream=null, scanning=false, scanLoop=null;
 const statusBadge=document.getElementById("statusBadge");
 
+// --- Helper ---
 function setStatus(txt){ statusBadge.innerText=txt; }
 
+// --- Init QR ---
 window.onload=function(){
   qr=new QRCode(document.getElementById("qrcode"),{text:"https://aminlogic.com",width:220,height:220,colorDark:"#fff",colorLight:"transparent",correctLevel:QRCode.CorrectLevel.H});
   loadHistory();
 };
 
+// --- Tab Switch ---
 function switchTab(tab){
   ["tabGenerator","tabScanner","tabHistory"].forEach(id=>document.getElementById(id).style.display="none");
   ["btnGenerator","btnScanner","btnHistory"].forEach(id=>document.getElementById(id).classList.remove("active"));
@@ -156,63 +167,53 @@ function switchTab(tab){
   if(tab==="history"){ document.getElementById("tabHistory").style.display="block"; document.getElementById("btnHistory").classList.add("active"); setStatus("History"); loadHistory(); }
 }
 
-// GENERATOR
-function generateQR(){
-  const text=document.getElementById("qrText").value.trim();
-  if(!text){ setStatus("Enter text"); return; }
-  document.getElementById("qrcode").innerHTML="";
-  qr=new QRCode(document.getElementById("qrcode"),{text,width:220,height:220,colorDark:"#fff",colorLight:"transparent",correctLevel:QRCode.CorrectLevel.H});
-  setStatus("Generated");
-}
+// --- QR Generator ---
+function generateQR(){ const t=document.getElementById("qrText").value.trim(); if(!t){setStatus("Enter text"); return;} document.getElementById("qrcode").innerHTML=""; qr=new QRCode(document.getElementById("qrcode"),{text:t,width:220,height:220,colorDark:"#fff",colorLight:"transparent",correctLevel:QRCode.CorrectLevel.H}); setStatus("Generated"); }
 function clearGenerator(){ document.getElementById("qrText").value=""; document.getElementById("qrcode").innerHTML=""; setStatus("Cleared"); }
-function copyText(){ const text=document.getElementById("qrText").value.trim(); if(!text){ setStatus("Nothing to copy"); return; } navigator.clipboard.writeText(text); setStatus("Copied"); }
-function saveQR(){ const text=document.getElementById("qrText").value.trim(); if(!text){ setStatus("Nothing to save"); return; } let h=JSON.parse(localStorage.getItem("aminlogic_qr_history")||"[]"); h.unshift({type:"Generated",value:text,time:new Date().toLocaleString()}); localStorage.setItem("aminlogic_qr_history",JSON.stringify(h)); setStatus("Saved"); }
-function shareQR(){ const text=document.getElementById("qrText").value.trim(); if(!text){ setStatus("Nothing to share"); return; } if(navigator.share){ navigator.share({title:"QR Code",text}).then(()=>setStatus("Shared")).catch(()=>setStatus("Share failed")); } else alert("Copy or save QR to share"); }
+function copyText(){ const t=document.getElementById("qrText").value.trim(); if(!t){setStatus("Nothing to copy"); return;} navigator.clipboard.writeText(t); setStatus("Copied"); }
+function saveQR(){ const t=document.getElementById("qrText").value.trim(); if(!t){setStatus("Nothing to save"); return;} let h=JSON.parse(localStorage.getItem("aminlogic_qr_history")||"[]"); h.unshift({type:"Generated",value:t,time:new Date().toLocaleString()}); localStorage.setItem("aminlogic_qr_history",JSON.stringify(h)); setStatus("Saved"); }
+function shareQR(){ const t=document.getElementById("qrText").value.trim(); if(!t){setStatus("Nothing to share"); return;} if(navigator.share){ navigator.share({title:"QR Code",text:t}).then(()=>setStatus("Shared")).catch(()=>setStatus("Share failed")); } else alert("Copy or save QR to share"); }
 
-// SCANNER
+// --- Scanner ---
 async function startScanner(){
   const video=document.getElementById("video");
   try{
-    videoStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
+    videoStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
     video.srcObject=videoStream;
     video.style.display="block";
-    scanning=true;
-    setStatus("Scanning...");
-    scanLoop=setInterval(scanFrame,250);
-  }catch(e){
-    console.error(e);
-    alert("Please allow camera permission to scan QR codes.");
-    setStatus("Camera permission required");
-  }
+    await video.play();
+    scanning=true; setStatus("Scanning...");
+    if(scanLoop) clearInterval(scanLoop);
+    scanLoop = setInterval(scanFrame,250);
+  }catch(e){ console.error(e); setStatus("Camera permission required"); alert("Please allow camera permission to scan QR codes."); }
 }
+
 function stopScanner(){
-  scanning=false;
-  setStatus("Stopped");
+  scanning=false; setStatus("Stopped");
   if(scanLoop){ clearInterval(scanLoop); scanLoop=null; }
   if(videoStream){ videoStream.getTracks().forEach(t=>t.stop()); videoStream=null; }
-  document.getElementById("video").srcObject=null;
-  document.getElementById("video").style.display="none";
+  const video=document.getElementById("video");
+  video.srcObject=null; video.style.display="none";
 }
+
 function scanFrame(){
   if(!scanning) return;
   const video=document.getElementById("video");
   if(video.readyState!==video.HAVE_ENOUGH_DATA) return;
-  const canvas=document.createElement("canvas"); canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+  const canvas=document.createElement("canvas");
+  canvas.width=video.videoWidth; canvas.height=video.videoHeight;
   const ctx=canvas.getContext("2d"); ctx.drawImage(video,0,0,canvas.width,canvas.height);
   const code=jsQR(ctx.getImageData(0,0,canvas.width,canvas.height).data,canvas.width,canvas.height);
   if(code){ document.getElementById("scanResultText").innerText=code.data; setStatus("QR Found!"); }
 }
-function saveScan(){
-  const val=document.getElementById("scanResultText").innerText.trim();
-  if(!val||val==="No scan yet..."){ setStatus("Nothing to save"); return; }
-  let h=JSON.parse(localStorage.getItem("aminlogic_qr_history")||"[]"); h.unshift({type:"Scanned",value:val,time:new Date().toLocaleString()}); localStorage.setItem("aminlogic_qr_history",JSON.stringify(h)); setStatus("Saved"); }
-function copyScan(){ const val=document.getElementById("scanResultText").innerText.trim(); if(!val||val==="No scan yet..."){ setStatus("Nothing to copy"); return; } navigator.clipboard.writeText(val); setStatus("Copied"); }
-function shareScan(){ const val=document.getElementById("scanResultText").innerText.trim(); if(!val||val==="No scan yet..."){ setStatus("Nothing to share"); return; } if(navigator.share){ navigator.share({title:"Scanned QR",text:val}).then(()=>setStatus("Shared")).catch(()=>setStatus("Share failed")); } else alert("Copy or save to share"); }
 
-// HISTORY
+function saveScan(){ const v=document.getElementById("scanResultText").innerText.trim(); if(!v||v==="No scan yet..."){setStatus("Nothing to save"); return;} let h=JSON.parse(localStorage.getItem("aminlogic_qr_history")||"[]"); h.unshift({type:"Scanned",value:v,time:new Date().toLocaleString()}); localStorage.setItem("aminlogic_qr_history",JSON.stringify(h)); setStatus("Saved"); }
+function copyScan(){ const v=document.getElementById("scanResultText").innerText.trim(); if(!v||v==="No scan yet..."){setStatus("Nothing to copy"); return;} navigator.clipboard.writeText(v); setStatus("Copied"); }
+function shareScan(){ const v=document.getElementById("scanResultText").innerText.trim(); if(!v||v==="No scan yet..."){setStatus("Nothing to share"); return;} if(navigator.share){ navigator.share({title:"Scanned QR",text:v}).then(()=>setStatus("Shared")).catch(()=>setStatus("Share failed")); } else alert("Copy or save to share"); }
+
+// --- History ---
 function loadHistory(){
-  const list=document.getElementById("historyList");
-  list.innerHTML="";
+  const list=document.getElementById("historyList"); list.innerHTML="";
   let h=JSON.parse(localStorage.getItem("aminlogic_qr_history")||"[]");
   if(h.length===0){ list.innerHTML="<p style='text-align:center;color:var(--muted);'>No history yet.</p>"; return; }
   h.forEach((item,i)=>{
@@ -225,6 +226,7 @@ function loadHistory(){
     list.appendChild(div);
   });
 }
+
 function clearHistory(){ if(confirm("Clear all history?")){ localStorage.removeItem("aminlogic_qr_history"); loadHistory(); setStatus("History cleared"); } }
 function copyHistory(i){ const h=JSON.parse(localStorage.getItem("aminlogic_qr_history")||"[]"); navigator.clipboard.writeText(h[i].value); setStatus("Copied"); }
 function shareHistory(i){ const h=JSON.parse(localStorage.getItem("aminlogic_qr_history")||"[]"); if(navigator.share){ navigator.share({title:"QR History",text:h[i].value}).then(()=>setStatus("Shared")).catch(()=>setStatus("Share failed")); } else alert("Copy to share"); }
