@@ -99,7 +99,10 @@ font-weight:700;
 font-size:14px;
 cursor:pointer;
 flex:1;
+transition: transform 0.1s;
 }
+
+button:active { transform: scale(0.98); }
 
 .btnrow{
 display:flex;
@@ -108,25 +111,10 @@ margin-top:14px;
 flex-wrap:wrap;
 }
 
-.generate{
-background:linear-gradient(135deg,#3da3ff,#216bff);
-color:white;
-}
-
-.share{
-background:linear-gradient(135deg,#44ffb1,#1abf7e);
-color:#04281b;
-}
-
-.copy{
-background:rgba(255,255,255,0.08);
-color:white;
-}
-
-.delete{
-background:linear-gradient(135deg,#ff4e6b,#ff2747);
-color:white;
-}
+.generate{ background:linear-gradient(135deg,#3da3ff,#216bff); color:white; }
+.share{ background:linear-gradient(135deg,#44ffb1,#1abf7e); color:#04281b; }
+.copy{ background:rgba(255,255,255,0.08); color:white; }
+.delete{ background:linear-gradient(135deg,#ff4e6b,#ff2747); color:white; }
 
 .historyItem{
 background:rgba(255,255,255,0.04);
@@ -136,17 +124,8 @@ margin-top:12px;
 border:1px solid rgba(255,255,255,0.07);
 }
 
-.historyItem strong{
-font-size:13px;
-display:block;
-margin-bottom:6px;
-}
-
-.historyItem span{
-font-size:12px;
-opacity:.7;
-word-break:break-all;
-}
+.historyItem strong{ font-size:13px; display:block; margin-bottom:6px; }
+.historyItem span{ font-size:12px; opacity:.7; word-break:break-all; }
 
 .tabs{
 position:fixed;
@@ -170,20 +149,17 @@ cursor:pointer;
 font-weight:700;
 }
 
-.active{
-background:#2b6fff;
-}
+.active{ background:#2b6fff; }
+footer{ text-align:center; font-size:11px; opacity:.5; margin-top:12px; }
 
-footer{
-text-align:center;
-font-size:11px;
-opacity:.5;
-margin-top:12px;
-}
+/* Hidden helper */
+#qr-buffer { display: none; }
 </style>
 </head>
 
 <body>
+
+<div id="qr-buffer"></div>
 
 <div class="container">
     <div class="header">
@@ -198,7 +174,7 @@ margin-top:12px;
         <div class="card">
             <h2>QR Code Generator</h2>
             <p>Create QR codes instantly and share anywhere.</p>
-            <textarea id="qrtext" placeholder="Enter URL, text, phone number, WiFi..."></textarea>
+            <textarea id="qrtext" placeholder="Enter URL, text, phone number..."></textarea>
             
             <div class="btnrow">
                 <button class="generate" onclick="generateQR()">Generate</button>
@@ -210,7 +186,7 @@ margin-top:12px;
             </div>
 
             <div class="btnrow">
-                <button class="share" onclick="shareQR()">Share QR</button>
+                <button class="share" onclick="downloadQR()">Download QR</button>
                 <button class="copy" onclick="saveQR()">Save History</button>
             </div>
         </div>
@@ -239,8 +215,8 @@ let qr;
 window.onload = function() {
     qr = new QRCode(document.getElementById("qrcode"), {
         text: "https://aminlogic.com",
-        width: 220,
-        height: 220,
+        width: 256,
+        height: 256,
         colorDark: "#000000",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
@@ -251,7 +227,6 @@ window.onload = function() {
 function generateQR() {
     let text = document.getElementById("qrtext").value;
     if(!text) return;
-    qr.clear();
     qr.makeCode(text);
 }
 
@@ -262,31 +237,17 @@ function copyText() {
     alert("Text Copied!");
 }
 
-async function shareQR() {
+function downloadQR() {
     const canvas = document.querySelector("#qrcode canvas");
     if (!canvas) return;
-
-    try {
-        const dataUrl = canvas.toDataURL("image/png");
-        const blob = await (await fetch(dataUrl)).blob();
-        const file = new File([blob], 'qr-code.png', { type: 'image/png' });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-                files: [file],
-                title: 'AminLogic QR Code',
-                text: document.getElementById("qrtext").value
-            });
-        } else {
-            // Fallback for text-only sharing if files are blocked
-            await navigator.share({
-                title: 'AminLogic QR Code',
-                text: document.getElementById("qrtext").value
-            });
-        }
-    } catch (err) {
-        alert("Sharing is blocked by this app's browser. Try copying the link instead.");
-    }
+    
+    const image = canvas.toDataURL("image/png");
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = 'aminlogic-qr.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 function saveQR() {
@@ -311,7 +272,7 @@ function loadHistory() {
             <strong>${item.date}</strong>
             <span>${item.text}</span>
             <div class="btnrow">
-                <button class="share" onclick="shareHistory(${i})">Share</button>
+                <button class="share" onclick="downloadHistory(${i})">Download</button>
                 <button class="copy" onclick="copyHistory(${i})">Copy</button>
                 <button class="delete" onclick="deleteHistory(${i})">Delete</button>
             </div>
@@ -320,31 +281,27 @@ function loadHistory() {
     });
 }
 
-async function shareHistory(i) {
+function downloadHistory(i) {
     let history = JSON.parse(localStorage.getItem("qrhistory"));
     let text = history[i].text;
     
-    // We update the main QR generator hidden in background to get the canvas
-    qr.makeCode(text);
-    
-    // Tiny delay to allow canvas to update
-    setTimeout(async () => {
-        const canvas = document.querySelector("#qrcode canvas");
-        const dataUrl = canvas.toDataURL("image/png");
-        const blob = await (await fetch(dataUrl)).blob();
-        const file = new File([blob], 'qr-code.png', { type: 'image/png' });
+    // Use hidden buffer to generate QR
+    const buffer = document.getElementById("qr-buffer");
+    buffer.innerHTML = "";
+    new QRCode(buffer, {
+        text: text,
+        width: 256,
+        height: 256
+    });
 
-        if (navigator.share) {
-            navigator.share({
-                files: [file],
-                title: "AminLogic QR Code",
-                text: text
-            }).catch(() => {
-                // Fallback to text share if file fails
-                navigator.share({ text: text });
-            });
-        }
-    }, 100);
+    setTimeout(() => {
+        const canvas = buffer.querySelector("canvas");
+        const image = canvas.toDataURL("image/png");
+        const link = document.createElement('a');
+        link.href = image;
+        link.download = 'aminlogic-saved-qr.png';
+        link.click();
+    }, 50);
 }
 
 function copyHistory(i) {
