@@ -78,31 +78,38 @@ color:white;
 font-size:14px;
 min-height:90px;
 box-sizing: border-box;
+outline: none;
 }
 
 .qrbox{
 margin-top:18px;
 padding:14px;
 border-radius:18px;
-background:white; /* White background ensures QR is scannable */
+background:white;
 display:flex;
 justify-content:center;
 min-height: 220px;
 }
+
+/* Invisible div for history generation */
+#temp-qr { display: none; }
 
 button{
 border:none;
 border-radius:14px;
 padding:12px 14px;
 font-weight:700;
-font-size:14px;
+font-size:13px;
 cursor:pointer;
 flex:1;
+transition: transform 0.1s;
 }
+
+button:active { transform: scale(0.95); }
 
 .btnrow{
 display:flex;
-gap:10px;
+gap:8px;
 margin-top:14px;
 flex-wrap:wrap;
 }
@@ -118,7 +125,7 @@ color:#04281b;
 }
 
 .copy{
-background:rgba(255,255,255,0.08);
+background:rgba(255,255,255,0.12);
 color:white;
 }
 
@@ -136,15 +143,18 @@ border:1px solid rgba(255,255,255,0.07);
 }
 
 .historyItem strong{
-font-size:13px;
+font-size:12px;
 display:block;
-margin-bottom:6px;
+margin-bottom:4px;
+opacity: 0.6;
 }
 
 .historyItem span{
-font-size:12px;
-opacity:.7;
+font-size:14px;
+font-weight: 500;
 word-break:break-all;
+display: block;
+margin-bottom: 10px;
 }
 
 .tabs{
@@ -157,6 +167,7 @@ padding:10px;
 display:flex;
 gap:10px;
 border-top:1px solid rgba(255,255,255,0.08);
+z-index: 100;
 }
 
 .tab{
@@ -186,7 +197,7 @@ margin-top:20px;
 
 <div class="container">
     <div class="header">
-        <img src="icon-512.png" class="logo">
+        <img src="icon-512.png" class="logo" alt="logo">
         <div class="title">
             <h1>AminLogic QR Generator</h1>
             <span>Create • Download • Save</span>
@@ -196,11 +207,11 @@ margin-top:20px;
     <div id="generator">
         <div class="card">
             <h2>QR Code Generator</h2>
-            <p>Enter text below to create and download your QR code.</p>
-            <textarea id="qrtext" placeholder="Enter URL, text, phone..."></textarea>
+            <p>Generate high-quality QR codes and download them to your gallery.</p>
+            <textarea id="qrtext" placeholder="Enter URL or text here..."></textarea>
             
             <div class="btnrow">
-                <button class="generate" onclick="generateQR()">Generate</button>
+                <button class="generate" onclick="generateQR()">Generate QR</button>
                 <button class="copy" onclick="copyText()">Copy Text</button>
             </div>
 
@@ -209,8 +220,8 @@ margin-top:20px;
             </div>
 
             <div class="btnrow">
-                <button class="download" onclick="downloadQR()">Download Image</button>
-                <button class="copy" onclick="saveQR()">Save to History</button>
+                <button class="download" onclick="downloadMainQR()">Download QR</button>
+                <button class="copy" onclick="saveQR()">Save History</button>
             </div>
         </div>
     </div>
@@ -220,12 +231,14 @@ margin-top:20px;
             <h2>Saved History</h2>
             <div id="historyList"></div>
             <div class="btnrow">
-                <button class="delete" onclick="clearHistory()">Clear History</button>
+                <button class="delete" onclick="clearHistory()">Clear All History</button>
             </div>
             <footer>AminLogic</footer>
         </div>
     </div>
 </div>
+
+<div id="temp-qr"></div>
 
 <div class="tabs">
     <div class="tab active" onclick="openTab('generator',this)">Generator</div>
@@ -254,22 +267,56 @@ function generateQR() {
     qrInstance.makeCode(text);
 }
 
-function downloadQR() {
+// Function to handle the actual downloading logic
+async function triggerDownload(canvas, filename) {
+    try {
+        const dataUrl = canvas.toDataURL("image/png");
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (e) {
+        // Fallback for some mobile browsers
+        window.open(canvas.toDataURL("image/png"), '_blank');
+    }
+}
+
+function downloadMainQR() {
     const canvas = document.querySelector("#qrcode canvas");
-    if (!canvas) return;
+    if (!canvas) {
+        alert("Please generate a QR code first.");
+        return;
+    }
+    triggerDownload(canvas, 'aminlogic-qr.png');
+}
+
+function downloadHistoryQR(text) {
+    const tempDiv = document.getElementById("temp-qr");
+    tempDiv.innerHTML = ""; // Clear
     
-    // Create a temporary link to trigger download
-    const link = document.createElement('a');
-    link.download = 'aminlogic-qr.png';
-    link.href = canvas.toDataURL("image/png");
-    link.click();
+    // Create a temporary QR code
+    new QRCode(tempDiv, {
+        text: text,
+        width: 512, // Higher resolution for downloads
+        height: 512,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    // Wait a tiny bit for the library to render the canvas
+    setTimeout(() => {
+        const canvas = tempDiv.querySelector("canvas");
+        triggerDownload(canvas, 'saved-qr.png');
+    }, 100);
 }
 
 function copyText() {
     let text = document.getElementById("qrtext").value;
     if(!text) return;
-    navigator.clipboard.writeText(text);
-    alert("Text copied!");
+    navigator.clipboard.writeText(text).then(() => alert("Copied to clipboard!"));
 }
 
 function saveQR() {
@@ -279,20 +326,30 @@ function saveQR() {
     history.unshift({ text: text, date: new Date().toLocaleString() });
     localStorage.setItem("qrhistory", JSON.stringify(history));
     loadHistory();
-    alert("Saved!");
+    alert("Saved to history!");
 }
 
 function loadHistory() {
     let list = document.getElementById("historyList");
     list.innerHTML = "";
     let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
+    
+    if(history.length === 0) {
+        list.innerHTML = "<p style='text-align:center;opacity:0.5;'>No history yet.</p>";
+        return;
+    }
+
     history.forEach((item, i) => {
         let div = document.createElement("div");
         div.className = "historyItem";
+        // We escape the text for the onclick function to avoid syntax errors
+        const escapedText = item.text.replace(/'/g, "\\'");
+        
         div.innerHTML = `
             <strong>${item.date}</strong>
             <span>${item.text}</span>
             <div class="btnrow">
+                <button class="download" onclick="downloadHistoryQR('${escapedText}')">Download</button>
                 <button class="copy" onclick="copyHistory(${i})">Copy</button>
                 <button class="delete" onclick="deleteHistory(${i})">Delete</button>
             </div>
@@ -303,8 +360,7 @@ function loadHistory() {
 
 function copyHistory(i) {
     let history = JSON.parse(localStorage.getItem("qrhistory"));
-    navigator.clipboard.writeText(history[i].text);
-    alert("Copied!");
+    navigator.clipboard.writeText(history[i].text).then(() => alert("Text copied!"));
 }
 
 function deleteHistory(i) {
@@ -315,7 +371,7 @@ function deleteHistory(i) {
 }
 
 function clearHistory() {
-    if(confirm("Clear all history?")) {
+    if(confirm("Permanently delete all saved QR codes?")) {
         localStorage.removeItem("qrhistory");
         loadHistory();
     }
