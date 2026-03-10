@@ -108,25 +108,10 @@ margin-top:14px;
 flex-wrap:wrap;
 }
 
-.generate{
-background:linear-gradient(135deg,#3da3ff,#216bff);
-color:white;
-}
-
-.share{
-background:linear-gradient(135deg,#44ffb1,#1abf7e);
-color:#04281b;
-}
-
-.copy{
-background:rgba(255,255,255,0.08);
-color:white;
-}
-
-.delete{
-background:linear-gradient(135deg,#ff4e6b,#ff2747);
-color:white;
-}
+.generate{ background:linear-gradient(135deg,#3da3ff,#216bff); color:white; }
+.share{ background:linear-gradient(135deg,#44ffb1,#1abf7e); color:#04281b; }
+.copy{ background:rgba(255,255,255,0.08); color:white; }
+.delete{ background:linear-gradient(135deg,#ff4e6b,#ff2747); color:white; }
 
 .historyItem{
 background:rgba(255,255,255,0.04);
@@ -136,17 +121,8 @@ margin-top:12px;
 border:1px solid rgba(255,255,255,0.07);
 }
 
-.historyItem strong{
-font-size:13px;
-display:block;
-margin-bottom:6px;
-}
-
-.historyItem span{
-font-size:12px;
-opacity:.7;
-word-break:break-all;
-}
+.historyItem strong{ font-size:13px; display:block; margin-bottom:6px; }
+.historyItem span{ font-size:12px; opacity:.7; word-break:break-all; }
 
 .tabs{
 position:fixed;
@@ -170,25 +146,19 @@ cursor:pointer;
 font-weight:700;
 }
 
-.active{
-background:#2b6fff;
-}
+.active{ background:#2b6fff; }
 
 .remark {
     text-align: center;
     font-size: 11px;
     font-weight: bold;
     color: #216bff;
-    margin-top: 10px;
+    margin-top: 12px;
     letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
-footer{
-text-align:center;
-font-size:11px;
-opacity:.5;
-margin-top:15px;
-}
+footer{ text-align:center; font-size:11px; opacity:.5; margin-top:15px; }
 </style>
 </head>
 
@@ -206,7 +176,7 @@ margin-top:15px;
     <div id="generator">
         <div class="card">
             <h2>QR Code Generator</h2>
-            <p>Create QR codes instantly and share anywhere.</p>
+            <p>Create QR codes instantly and share via WhatsApp.</p>
             <textarea id="qrtext" placeholder="Enter URL or text here..."></textarea>
             
             <div class="btnrow">
@@ -221,7 +191,7 @@ margin-top:15px;
             <div class="remark">POWERED BY AMINLOGIC</div>
 
             <div class="btnrow">
-                <button class="share" onclick="shareSimple()">Share Link</button>
+                <button class="share" onclick="shareViaWhatsApp()">Share via WhatsApp</button>
                 <button class="copy" onclick="saveQR()">Save History</button>
             </div>
         </div>
@@ -269,21 +239,14 @@ function copyText() {
     let text = document.getElementById("qrtext").value;
     if(!text) return;
     navigator.clipboard.writeText(text);
-    alert("Text copied!");
+    alert("Copied to clipboard!");
 }
 
-function shareSimple() {
+function shareViaWhatsApp() {
     let text = document.getElementById("qrtext").value || "https://aminlogic.com";
-    if (navigator.share) {
-        navigator.share({
-            title: 'AminLogic QR',
-            text: text
-        }).catch(() => {
-            alert("Error opening share menu.");
-        });
-    } else {
-        alert("Sharing not supported. Try Copy instead.");
-    }
+    // This uses the universal WhatsApp API which bypasses WebView sharing blocks
+    let url = "https://api.whatsapp.com/send?text=" + encodeURIComponent("Check out my QR Link: " + text);
+    window.open(url, '_blank');
 }
 
 function saveQR() {
@@ -293,7 +256,7 @@ function saveQR() {
     history.unshift({ text: text, date: new Date().toLocaleString() });
     localStorage.setItem("qrhistory", JSON.stringify(history));
     loadHistory();
-    alert("Saved!");
+    alert("Saved to history!");
 }
 
 function loadHistory() {
@@ -318,9 +281,8 @@ function loadHistory() {
 }
 
 function shareHistoryItem(txt) {
-    if (navigator.share) {
-        navigator.share({ text: txt });
-    }
+    let url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(txt);
+    window.open(url, '_blank');
 }
 
 function copyHistory(i) {
@@ -337,7 +299,7 @@ function deleteHistory(i) {
 }
 
 function clearHistory() {
-    if(confirm("Clear history?")) {
+    if(confirm("Clear all history?")) {
         localStorage.removeItem("qrhistory");
         loadHistory();
     }
