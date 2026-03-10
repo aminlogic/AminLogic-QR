@@ -8,88 +8,53 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
-body{ margin:0; font-family:Arial,sans-serif; background:#05070f; color:white; min-height:100vh; }
-.container{ max-width:520px; margin:auto; padding:16px; padding-bottom:100px; }
-.header{ display:flex; align-items:center; gap:12px; margin-bottom:18px; }
-.logo{ width:48px; height:48px; border-radius:14px; }
-.title h1{ margin:0; font-size:18px; font-weight:800; }
-.title span{ font-size:12px; opacity:.6; }
+body{ margin:0; font-family:sans-serif; background:#05070f; color:white; }
+.container{ max-width:500px; margin:auto; padding:15px; padding-bottom:100px; }
+.card{ background:rgba(255,255,255,0.05); border-radius:20px; padding:20px; margin-bottom:15px; border:1px solid rgba(255,255,255,0.1); }
+textarea{ width:100%; background:#000; border:1px solid #333; border-radius:12px; padding:12px; color:white; box-sizing:border-box; min-height:80px; margin-bottom:10px; }
+.qrbox{ background:white; padding:15px; border-radius:15px; display:flex; justify-content:center; align-items:center; min-height:250px; }
+#qrcode canvas { display: none; } /* Hide the technical canvas */
+#qrcode img { display: block; max-width: 100%; height: auto; border: 1px solid #eee; } /* Show only the real image */
 
-.card{ background:rgba(255,255,255,0.05); border-radius:20px; padding:18px; margin-bottom:16px; border:1px solid rgba(255,255,255,0.08); }
-textarea{ width:100%; background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:12px; color:white; box-sizing:border-box; min-height:80px; outline:none; }
-
-.qrbox{ margin-top:18px; padding:14px; border-radius:18px; background:white; display:flex; justify-content:center; }
-#qrcode img { display: block; } /* Ensure the generated image is visible */
-
-.btnrow{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
-button{ border:none; border-radius:12px; padding:12px; font-weight:700; flex:1; cursor:pointer; }
+.btnrow{ display:flex; gap:8px; margin-top:15px; flex-wrap:wrap; }
+button{ border:none; border-radius:12px; padding:14px; font-weight:700; flex:1; cursor:pointer; font-size:14px; }
 .generate{ background:#216bff; color:white; }
 .download{ background:#1abf7e; color:#04281b; }
-.copy{ background:rgba(255,255,255,0.1); color:white; }
+.copy{ background:#333; color:white; }
 .delete{ background:#ff2747; color:white; }
 
-/* OVERLAY FOR DOWNLOADING */
-#downloadOverlay {
-    display: none;
-    position: fixed;
-    top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.95);
-    z-index: 1000;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    text-align: center;
-}
-#downloadOverlay img { 
-    max-width: 80%; 
-    border: 10px solid white; 
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-#downloadOverlay p { font-size: 16px; font-weight: bold; margin-bottom: 20px; }
-
-.historyItem{ background:rgba(255,255,255,0.04); padding:14px; border-radius:14px; margin-top:12px; border:1px solid rgba(255,255,255,0.07); }
-.historyItem span{ font-size:13px; word-break:break-all; display:block; margin: 8px 0; }
-
-.tabs{ position:fixed; bottom:0; left:0; right:0; background:#060912; padding:10px; display:flex; gap:10px; border-top:1px solid rgba(255,255,255,0.08); }
-.tab{ flex:1; text-align:center; padding:12px; border-radius:14px; background:rgba(255,255,255,0.05); font-weight:700; }
+.historyItem{ background:rgba(255,255,255,0.03); padding:15px; border-radius:15px; margin-top:10px; }
+.tabs{ position:fixed; bottom:0; left:0; right:0; background:#060912; padding:12px; display:flex; gap:10px; border-top:1px solid #222; }
+.tab{ flex:1; text-align:center; padding:12px; border-radius:12px; background:#111; cursor:pointer; }
 .active{ background:#2b6fff; }
+
+#msg { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1abf7e; color: black; padding: 8px 20px; border-radius: 20px; font-weight: bold; display: none; z-index: 1000; }
 </style>
 </head>
 
 <body>
 
-<div id="downloadOverlay">
-    <p>Long-press the image below<br>to Save/Download to Gallery</p>
-    <div id="overlayImageContainer"></div>
-    <button class="delete" style="flex:none; width:200px;" onclick="closeOverlay()">Close</button>
-</div>
+<div id="msg">Copied!</div>
 
 <div class="container">
-    <div class="header">
-        <img src="icon-512.png" class="logo">
-        <div class="title"><h1>AminLogic QR Generator</h1><span>Create • Save • Gallery</span></div>
-    </div>
-
-    <div id="generator">
-        <div class="card">
-            <textarea id="qrtext" placeholder="Paste link or text..."></textarea>
-            <div class="btnrow">
-                <button class="generate" onclick="generateQR()">Generate QR</button>
-                <button class="copy" onclick="copyText()">Copy Text</button>
-            </div>
-            <div class="qrbox"><div id="qrcode"></div></div>
-            <div class="btnrow">
-                <button class="download" onclick="prepareDownload()">Download QR</button>
-                <button class="copy" onclick="saveToHistory()">Save History</button>
-            </div>
+    <div class="card">
+        <h2 style="margin-top:0">QR Generator</h2>
+        <textarea id="qrtext" placeholder="Type or paste link..."></textarea>
+        <div class="btnrow">
+            <button class="generate" onclick="generateQR()">Generate</button>
+            <button class="copy" onclick="copyText()">Copy Link</button>
+        </div>
+        <div class="qrbox" id="qrcode"></div>
+        <p style="text-align:center; font-size:12px; color:#aaa; margin-top:10px;">Tap Generate, then Long-Press image to Save</p>
+        <div class="btnrow">
+            <button class="download" onclick="forceDownload()">Open & Save Image</button>
+            <button class="copy" onclick="saveHistory()">Save History</button>
         </div>
     </div>
 
     <div id="history" style="display:none">
         <div class="card">
-            <h2>Saved History</h2>
+            <h2>History</h2>
             <div id="historyList"></div>
             <button class="delete" style="width:100%; margin-top:10px;" onclick="clearHistory()">Clear All</button>
         </div>
@@ -97,76 +62,86 @@ button{ border:none; border-radius:12px; padding:12px; font-weight:700; flex:1; 
 </div>
 
 <div class="tabs">
-    <div class="tab active" onclick="openTab('generator',this)">Generator</div>
+    <div class="tab active" onclick="openTab('generator',this)">Create</div>
     <div class="tab" onclick="openTab('history',this)">History</div>
 </div>
 
 <script>
 let qr;
-window.onload = function() {
-    qr = new QRCode(document.getElementById("qrcode"), {
-        text: "https://aminlogic.com",
-        width: 256, height: 256,
-        colorDark: "#000000", colorLight: "#ffffff",
+let qrContainer = document.getElementById("qrcode");
+
+function initQR(text) {
+    qrContainer.innerHTML = "";
+    qr = new QRCode(qrContainer, {
+        text: text,
+        width: 300,
+        height: 300,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
     });
+}
+
+window.onload = function() {
+    initQR("https://aminlogic.com");
     loadHistory();
 };
 
 function generateQR() {
     let val = document.getElementById("qrtext").value;
-    if(val) qr.makeCode(val);
+    if(val) initQR(val);
 }
 
-function prepareDownload(manualText = null) {
-    const canvas = document.querySelector("#qrcode canvas");
-    if (!canvas) return;
+// THE KEY SOLUTION: Open image in a new data window
+function forceDownload() {
+    const img = qrContainer.querySelector("img");
+    if (!img || !img.src) {
+        alert("Generate a code first");
+        return;
+    }
     
-    // Create a real <img> tag from the canvas
-    const imgData = canvas.toDataURL("image/png");
-    const container = document.getElementById("overlayImageContainer");
-    container.innerHTML = `<img src="${imgData}" alt="QR Code">`;
-    
-    document.getElementById("downloadOverlay").style.display = "flex";
+    // Create a new window/tab with just the image
+    // This forces almost all WebViews to show their "Save/Share" menu
+    const newTab = window.open();
+    newTab.document.write(`<body style="margin:0; background:#000; display:flex; align-items:center; justify-content:center;">
+        <img src="${img.src}" style="width:100%; max-width:500px;">
+        <p style="position:fixed; bottom:20px; color:white; font-family:sans-serif;">Long-press image to save to Gallery</p>
+    </body>`);
 }
 
-function closeOverlay() {
-    document.getElementById("downloadOverlay").style.display = "none";
-}
-
-function saveToHistory() {
+function saveHistory() {
     let text = document.getElementById("qrtext").value;
     if (!text) return;
     let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
     history.unshift({ text: text, date: new Date().toLocaleString() });
     localStorage.setItem("qrhistory", JSON.stringify(history));
+    showMsg("Saved to History!");
     loadHistory();
-    alert("Saved!");
 }
 
 function loadHistory() {
     let list = document.getElementById("historyList");
     let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
-    list.innerHTML = history.length ? "" : "<p style='opacity:0.5'>No items.</p>";
+    list.innerHTML = history.length ? "" : "<p style='opacity:0.5'>Empty.</p>";
     
     history.forEach((item, i) => {
         let div = document.createElement("div");
         div.className = "historyItem";
         div.innerHTML = `
-            <strong>${item.date}</strong>
-            <span>${item.text}</span>
+            <div style="font-size:12px; opacity:0.6">${item.date}</div>
+            <div style="margin:5px 0; word-break:break-all;">${item.text}</div>
             <div class="btnrow">
-                <button class="download" onclick="downloadFromHistory('${item.text.replace(/'/g, "\\'")}')">Download</button>
-                <button class="delete" onclick="deleteHistory(${i})">Delete</button>
+                <button class="generate" style="padding:8px" onclick="loadFromHistory('${item.text.replace(/'/g, "\\'")}')">View</button>
+                <button class="delete" style="padding:8px" onclick="deleteHistory(${i})">Delete</button>
             </div>`;
         list.appendChild(div);
     });
 }
 
-function downloadFromHistory(text) {
-    // Temporarily update main QR to get the correct canvas
-    qr.makeCode(text);
-    setTimeout(prepareDownload, 100);
+function loadFromHistory(text) {
+    document.getElementById("qrtext").value = text;
+    initQR(text);
+    openTab('generator', document.querySelectorAll('.tab')[0]);
 }
 
 function deleteHistory(i) {
@@ -176,7 +151,7 @@ function deleteHistory(i) {
     loadHistory();
 }
 
-function clearHistory() { if(confirm("Clear all?")) { localStorage.removeItem("qrhistory"); loadHistory(); } }
+function clearHistory() { if(confirm("Clear everything?")) { localStorage.removeItem("qrhistory"); loadHistory(); } }
 
 function openTab(name, el) {
     document.getElementById("generator").style.display = name === "generator" ? "block" : "none";
@@ -187,8 +162,16 @@ function openTab(name, el) {
 
 function copyText() {
     let text = document.getElementById("qrtext").value;
+    if(!text) return;
     navigator.clipboard.writeText(text);
-    alert("Copied!");
+    showMsg("Link Copied!");
+}
+
+function showMsg(txt) {
+    let m = document.getElementById("msg");
+    m.innerText = txt;
+    m.style.display = "block";
+    setTimeout(() => { m.style.display = "none"; }, 2000);
 }
 </script>
 </body>
