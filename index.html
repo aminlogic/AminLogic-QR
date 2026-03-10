@@ -8,12 +8,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial,Helvetica,sans-serif;
 background:linear-gradient(180deg,#0d1222,#05070f);
 color:white;
+min-height: 100vh;
 }
 
 .container{
@@ -35,6 +35,7 @@ width:48px;
 height:48px;
 border-radius:14px;
 box-shadow:0 6px 18px rgba(0,0,0,0.4);
+background: #2b6fff; /* Fallback if image missing */
 }
 
 .title h1{
@@ -77,15 +78,17 @@ padding:12px;
 color:white;
 font-size:14px;
 min-height:90px;
+box-sizing: border-box;
 }
 
 .qrbox{
 margin-top:18px;
 padding:14px;
 border-radius:18px;
-background:black;
+background:white; /* Changed to white for better QR scanning */
 display:flex;
 justify-content:center;
+min-height: 220px;
 }
 
 button{
@@ -96,7 +99,10 @@ font-weight:700;
 font-size:14px;
 cursor:pointer;
 flex:1;
+transition: opacity 0.2s;
 }
+
+button:active { opacity: 0.7; }
 
 .btnrow{
 display:flex;
@@ -175,263 +181,208 @@ footer{
 text-align:center;
 font-size:11px;
 opacity:.5;
-margin-top:12px;
+margin: 20px 0;
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="container">
+    <div class="header">
+        <img src="icon-512.png" class="logo" alt="Logo">
+        <div class="title">
+            <h1>AminLogic QR Generator</h1>
+            <span>Create • Share • Save</span>
+        </div>
+    </div>
 
-<div class="header">
-<img src="icon-512.png" class="logo">
-<div class="title">
-<h1>AminLogic QR Generator</h1>
-<span>Create • Share • Save</span>
+    <div id="generator">
+        <div class="card">
+            <h2>QR Code Generator</h2>
+            <p>Create QR codes instantly and share anywhere.</p>
+            <textarea id="qrtext" placeholder="Enter URL, text, phone number, WiFi..."></textarea>
+            
+            <div class="btnrow">
+                <button class="generate" onclick="generateQR()">Generate</button>
+                <button class="copy" onclick="copyText()">Copy Text</button>
+            </div>
+
+            <div class="qrbox">
+                <div id="qrcode"></div>
+            </div>
+
+            <div class="btnrow">
+                <button class="share" onclick="shareQR()">Share QR Image</button>
+                <button class="copy" onclick="saveQR()">Save to History</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="history" style="display:none">
+        <div class="card">
+            <h2>Saved QR Codes</h2>
+            <div id="historyList"></div>
+            <div class="btnrow">
+                <button class="delete" onclick="clearHistory()">Clear History</button>
+            </div>
+            <footer>AminLogic</footer>
+        </div>
+    </div>
 </div>
-</div>
-
-<!-- GENERATOR -->
-
-<div id="generator">
-
-<div class="card">
-
-<h2>QR Code Generator</h2>
-<p>Create QR codes instantly and share anywhere.</p>
-
-<textarea id="qrtext" placeholder="Enter URL, text, phone number, WiFi..."></textarea>
-
-<div class="btnrow">
-<button class="generate" onclick="generateQR()">Generate</button>
-<button class="copy" onclick="copyText()">Copy</button>
-</div>
-
-<div class="qrbox">
-<div id="qrcode"></div>
-</div>
-
-<div class="btnrow">
-<button class="share" onclick="shareQR()">Share</button>
-<button class="copy" onclick="saveQR()">Save</button>
-</div>
-
-</div>
-
-</div>
-
-<!-- HISTORY -->
-
-<div id="history" style="display:none">
-
-<div class="card">
-
-<h2>Saved QR Codes</h2>
-
-<div id="historyList"></div>
-
-<div class="btnrow">
-<button class="delete" onclick="clearHistory()">Clear History</button>
-</div>
-
-<footer>AminLogic</footer>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- TABS -->
 
 <div class="tabs">
-
-<div class="tab active" onclick="openTab('generator',this)">Generator</div>
-
-<div class="tab" onclick="openTab('history',this)">History</div>
-
+    <div class="tab active" onclick="openTab('generator',this)">Generator</div>
+    <div class="tab" onclick="openTab('history',this)">History</div>
 </div>
 
 <script>
+let qrInstance;
 
-let qr;
-
-window.onload=function(){
-
-qr=new QRCode(document.getElementById("qrcode"),{
-text:"https://aminlogic.com",
-width:220,
-height:220,
-colorDark:"#ffffff",
-colorLight:"#000000",
-correctLevel:QRCode.CorrectLevel.H
-});
-
-loadHistory();
-
+window.onload = function() {
+    // Initialize QR Code
+    qrInstance = new QRCode(document.getElementById("qrcode"), {
+        text: "https://aminlogic.com",
+        width: 220,
+        height: 220,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+    loadHistory();
 };
 
-function generateQR(){
-
-let text=document.getElementById("qrtext").value;
-
-if(!text)return;
-
-document.getElementById("qrcode").innerHTML="";
-
-qr=new QRCode(document.getElementById("qrcode"),{
-text:text,
-width:220,
-height:220
-});
-
+function generateQR() {
+    let text = document.getElementById("qrtext").value;
+    if (!text) {
+        alert("Please enter some text first.");
+        return;
+    }
+    // Update existing QR rather than clearing innerHTML to maintain stability
+    qrInstance.clear();
+    qrInstance.makeCode(text);
 }
 
-function copyText(){
-
-let text=document.getElementById("qrtext").value;
-
-navigator.clipboard.writeText(text);
-
+function copyText() {
+    let text = document.getElementById("qrtext").value;
+    if(!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Text copied to clipboard!");
+    });
 }
 
-async function shareQR(){
+async function shareQR() {
+    const canvas = document.querySelector("#qrcode canvas");
+    if (!canvas) {
+        alert("Generate a QR code first!");
+        return;
+    }
 
-let canvas=document.querySelector("#qrcode canvas");
+    try {
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        const file = new File([blob], "qr-code.png", { type: "image/png" });
+        const text = document.getElementById("qrtext").value || "My QR Code";
 
-if(!canvas)return;
-
-canvas.toBlob(async function(blob){
-
-let file=new File([blob],"aminlogic-qr.png",{type:"image/png"});
-
-if(navigator.share){
-
-await navigator.share({
-title:"AminLogic QR Code",
-text:document.getElementById("qrtext").value,
-files:[file]
-});
-
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                files: [file],
+                title: 'AminLogic QR Code',
+                text: text
+            });
+        } else {
+            // Fallback for browsers that support sharing but not files
+            await navigator.share({
+                title: 'AminLogic QR Code',
+                text: text
+            });
+        }
+    } catch (err) {
+        console.error("Share failed:", err);
+        alert("Sharing is not supported in this browser or webview.");
+    }
 }
 
-});
+function saveQR() {
+    let text = document.getElementById("qrtext").value;
+    if (!text) return;
 
+    let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
+    history.unshift({
+        text: text,
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("qrhistory", JSON.stringify(history));
+    alert("Saved to history!");
+    loadHistory();
 }
 
-function saveQR(){
+function loadHistory() {
+    let list = document.getElementById("historyList");
+    list.innerHTML = "";
+    let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
 
-let text=document.getElementById("qrtext").value;
+    if (history.length === 0) {
+        list.innerHTML = "<p style='text-align:center; opacity:0.5'>No saved items yet.</p>";
+        return;
+    }
 
-if(!text)return;
-
-let history=JSON.parse(localStorage.getItem("qrhistory")||"[]");
-
-history.unshift({
-text:text,
-date:new Date().toLocaleString()
-});
-
-localStorage.setItem("qrhistory",JSON.stringify(history));
-
-loadHistory();
-
+    history.forEach((item, i) => {
+        let div = document.createElement("div");
+        div.className = "historyItem";
+        div.innerHTML = `
+            <strong>${item.date}</strong>
+            <span>${item.text}</span>
+            <div class="btnrow">
+                <button class="share" onclick="shareHistory(${i})">Share</button>
+                <button class="copy" onclick="copyHistory(${i})">Copy</button>
+                <button class="delete" onclick="deleteHistory(${i})">Delete</button>
+            </div>
+        `;
+        list.appendChild(div);
+    });
 }
 
-function loadHistory(){
+function shareHistory(i) {
+    let history = JSON.parse(localStorage.getItem("qrhistory"));
+    let text = history[i].text;
 
-let list=document.getElementById("historyList");
-
-list.innerHTML="";
-
-let history=JSON.parse(localStorage.getItem("qrhistory")||"[]");
-
-history.forEach((item,i)=>{
-
-let div=document.createElement("div");
-
-div.className="historyItem";
-
-div.innerHTML=`
-
-<strong>${item.date}</strong>
-
-<span>${item.text}</span>
-
-<div class="btnrow">
-
-<button class="share" onclick="shareHistory(${i})">Share</button>
-
-<button class="copy" onclick="copyHistory(${i})">Copy</button>
-
-<button class="delete" onclick="deleteHistory(${i})">Delete</button>
-
-</div>
-
-`;
-
-list.appendChild(div);
-
-});
-
+    if (navigator.share) {
+        navigator.share({
+            title: "AminLogic QR Code",
+            text: text
+        }).catch(err => console.log("Share failed", err));
+    } else {
+        alert("Sharing not supported");
+    }
 }
 
-function shareHistory(i){
-
-let history=JSON.parse(localStorage.getItem("qrhistory"));
-
-let text=history[i].text;
-
-navigator.share({
-title:"AminLogic QR Code",
-text:text
-});
-
+function copyHistory(i) {
+    let history = JSON.parse(localStorage.getItem("qrhistory"));
+    navigator.clipboard.writeText(history[i].text).then(() => alert("Copied!"));
 }
 
-function copyHistory(i){
-
-let history=JSON.parse(localStorage.getItem("qrhistory"));
-
-navigator.clipboard.writeText(history[i].text);
-
+function deleteHistory(i) {
+    let history = JSON.parse(localStorage.getItem("qrhistory"));
+    history.splice(i, 1);
+    localStorage.setItem("qrhistory", JSON.stringify(history));
+    loadHistory();
 }
 
-function deleteHistory(i){
-
-let history=JSON.parse(localStorage.getItem("qrhistory"));
-
-history.splice(i,1);
-
-localStorage.setItem("qrhistory",JSON.stringify(history));
-
-loadHistory();
-
+function clearHistory() {
+    if(confirm("Clear all saved QR codes?")) {
+        localStorage.removeItem("qrhistory");
+        loadHistory();
+    }
 }
 
-function clearHistory(){
-
-localStorage.removeItem("qrhistory");
-
-loadHistory();
-
+function openTab(name, el) {
+    document.getElementById("generator").style.display = "none";
+    document.getElementById("history").style.display = "none";
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.getElementById(name).style.display = "block";
+    el.classList.add("active");
 }
-
-function openTab(name,el){
-
-document.getElementById("generator").style.display="none";
-document.getElementById("history").style.display="none";
-
-document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-
-document.getElementById(name).style.display="block";
-
-el.classList.add("active");
-
-}
-
 </script>
 
 </body>
