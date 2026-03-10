@@ -6,27 +6,21 @@
 <title>AminLogic QR Generator</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 body{
 margin:0;
-font-family:Arial,Helvetica,sans-serif;
+font-family:Arial,sans-serif;
 background:linear-gradient(180deg,#0d1222,#05070f);
 color:white;
 min-height: 100vh;
 }
 
-.container{
-max-width:520px;
-margin:auto;
-padding:16px;
-padding-bottom:100px;
-}
+.container{ max-width:520px; margin:auto; padding:16px; padding-bottom:100px; }
 
 .header{ display:flex; align-items:center; gap:12px; margin-bottom:18px; }
-.logo{ width:48px; height:48px; border-radius:14px; box-shadow:0 6px 18px rgba(0,0,0,0.4); }
-.title h1{ margin:0; font-size:18px; font-weight:800; }
-.title span{ font-size:12px; opacity:.6; }
+.logo{ width:48px; height:48px; border-radius:14px; background:#216bff; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:10px; }
 
 .card{
 background:rgba(255,255,255,0.05);
@@ -34,7 +28,6 @@ border-radius:20px;
 padding:18px;
 margin-bottom:16px;
 border:1px solid rgba(255,255,255,0.08);
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
 textarea{
@@ -44,241 +37,199 @@ border:1px solid rgba(255,255,255,0.1);
 border-radius:14px;
 padding:12px;
 color:white;
-font-size:14px;
-min-height:90px;
 box-sizing: border-box;
 outline: none;
+min-height: 80px;
 }
 
-.qrbox{
-margin-top:18px;
-padding:20px;
-border-radius:18px;
-background:white;
-display:flex;
-justify-content:center;
-min-height: 220px;
+/* This is the area we "Snapshot" */
+.capture-area {
+    background: white;
+    padding: 20px;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+
+#qrcode { margin-bottom: 10px; }
+
+.branding-remark {
+    color: #0d1222;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    opacity: 0.8;
 }
 
 button{
 border:none;
 border-radius:14px;
-padding:12px 14px;
+padding:14px;
 font-weight:700;
-font-size:14px;
 cursor:pointer;
 flex:1;
 }
 
-.btnrow{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.btnrow{ display:flex; gap:10px; margin-top:14px; }
 .generate{ background:linear-gradient(135deg,#3da3ff,#216bff); color:white; }
 .share{ background:linear-gradient(135deg,#44ffb1,#1abf7e); color:#04281b; }
-.copy{ background:rgba(255,255,255,0.08); color:white; }
-.delete{ background:linear-gradient(135deg,#ff4e6b,#ff2747); color:white; }
+.copy{ background:rgba(255,255,255,0.1); color:white; }
 
 .historyItem{
 background:rgba(255,255,255,0.04);
-padding:14px;
+padding:15px;
 border-radius:14px;
-margin-top:12px;
+margin-top:10px;
 border:1px solid rgba(255,255,255,0.07);
 }
 
-.tabs{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#060912;
-padding:10px;
-display:flex;
-gap:10px;
-border-top:1px solid rgba(255,255,255,0.08);
-}
-
-.tab{ flex:1; text-align:center; padding:12px; border-radius:14px; background:rgba(255,255,255,0.05); cursor:pointer; font-weight:700; }
+.tabs{ position:fixed; bottom:0; left:0; right:0; background:#060912; padding:10px; display:flex; gap:10px; border-top:1px solid rgba(255,255,255,0.1); }
+.tab{ flex:1; text-align:center; padding:12px; border-radius:12px; background:rgba(255,255,255,0.05); cursor:pointer; }
 .active{ background:#2b6fff; }
 
-/* SCREENSHOT MODE OVERLAY */
-#screenshot-overlay {
+/* Result Overlay */
+#result-overlay {
     display: none;
     position: fixed;
-    top:0; left:0; width:100vw; height:100vh;
-    background: white;
-    z-index: 9999;
+    top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.95);
+    z-index: 1000;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 20px;
 }
-.close-overlay {
-    position: absolute;
-    top: 40px;
-    right: 20px;
-    background: #ff2747;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
-}
-#overlay-qr-space { padding: 20px; background: white; }
+#result-image { max-width: 90%; border-radius: 10px; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
 </style>
 </head>
 
 <body>
 
-<div id="screenshot-overlay">
-    <button class="close-overlay" onclick="closeCapture()">Close</button>
-    <div style="color: black; margin-bottom: 20px; font-weight: bold;">SCREENSHOT THIS SCREEN</div>
-    <div id="overlay-qr-space"></div>
-    <div style="color: #666; margin-top: 20px; font-size: 12px;">AminLogic QR Generator</div>
+<div id="result-overlay">
+    <h3 style="margin-bottom:10px">QR Ready!</h3>
+    <p style="font-size:12px; opacity:0.8; margin-bottom:20px">Hold image to Save or Share</p>
+    <img id="result-image" src="" alt="Result">
+    <button class="copy" style="margin-top:20px; flex:none; width:150px" onclick="document.getElementById('result-overlay').style.display='none'">Close</button>
 </div>
 
-<div class="container" id="main-ui">
+<div class="container">
     <div class="header">
-        <img src="icon-512.png" class="logo">
+        <div class="logo">AMIN</div>
         <div class="title">
-            <h1>AminLogic QR Generator</h1>
-            <span>Create • Capture • Save</span>
+            <h1>AminLogic QR</h1>
+            <span style="opacity:0.6; font-size:12px">Premium QR Generator</span>
         </div>
     </div>
 
-    <div id="generator">
+    <div id="generator-tab">
         <div class="card">
-            <textarea id="qrtext" placeholder="Enter URL or text..."></textarea>
-            
+            <textarea id="qr-input" placeholder="Paste link here..."></textarea>
             <div class="btnrow">
-                <button class="generate" onclick="generateQR()">Generate</button>
-                <button class="copy" onclick="copyText()">Copy Text</button>
+                <button class="generate" onclick="generateNow()">Generate</button>
             </div>
 
-            <div class="qrbox">
+            <div class="capture-area" id="target">
                 <div id="qrcode"></div>
+                <div class="branding-remark">AMINLOGIC PREMIERE</div>
             </div>
 
             <div class="btnrow">
-                <button class="share" onclick="openCapture()">Capture Mode</button>
-                <button class="copy" onclick="saveQR()">Save History</button>
+                <button class="share" onclick="takeSnapshot()">Share / Save</button>
+                <button class="copy" onclick="saveToHistory()">History</button>
             </div>
         </div>
     </div>
 
-    <div id="history" style="display:none">
+    <div id="history-tab" style="display:none">
         <div class="card">
             <h2>History</h2>
-            <div id="historyList"></div>
-            <div class="btnrow">
-                <button class="delete" onclick="clearHistory()">Clear History</button>
-            </div>
+            <div id="history-list"></div>
         </div>
     </div>
 </div>
 
-<div class="tabs" id="tab-bar">
-    <div class="tab active" onclick="openTab('generator',this)">Generator</div>
-    <div class="tab" onclick="openTab('history',this)">History</div>
+<div class="tabs">
+    <div class="tab active" onclick="switchTab('generator-tab', this)">Create</div>
+    <div class="tab" onclick="switchTab('history-tab', this)">History</div>
 </div>
 
 <script>
 let qr;
-
 window.onload = function() {
     qr = new QRCode(document.getElementById("qrcode"), {
         text: "https://aminlogic.com",
-        width: 256,
-        height: 256,
+        width: 200,
+        height: 200,
         colorDark: "#000000",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
     });
-    loadHistory();
 };
 
-function generateQR() {
-    let text = document.getElementById("qrtext").value;
-    if(!text) return;
-    qr.makeCode(text);
+function generateNow() {
+    let val = document.getElementById("qr-input").value;
+    if(val) qr.makeCode(val);
 }
 
-function openCapture() {
-    const text = document.getElementById("qrtext").value || "https://aminlogic.com";
-    const overlaySpace = document.getElementById("overlay-qr-space");
-    overlaySpace.innerHTML = "";
+// THE "AUTOMATIC SCREENSHOT" SOLUTION
+function takeSnapshot() {
+    const target = document.getElementById("target");
     
-    // Generate a fresh, high-res QR for the screenshot
-    new QRCode(overlaySpace, {
-        text: text,
-        width: 300,
-        height: 300
+    html2canvas(target, {
+        backgroundColor: null,
+        scale: 2 // High resolution
+    }).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const overlay = document.getElementById("result-overlay");
+        const resultImg = document.getElementById("result-image");
+        
+        resultImg.src = imgData;
+        overlay.style.display = "flex";
+        
+        // Attempt to trigger native share if available, 
+        // otherwise the user sees the image to save.
+        if (navigator.share) {
+            fetch(imgData).then(res => res.blob()).then(blob => {
+                const file = new File([blob], "AminLogic_QR.png", {type: "image/png"});
+                navigator.share({
+                    files: [file],
+                    title: 'AminLogic QR',
+                }).catch(err => console.log("Share failed, showing image instead."));
+            });
+        }
     });
-
-    document.getElementById("screenshot-overlay").style.display = "flex";
 }
 
-function closeCapture() {
-    document.getElementById("screenshot-overlay").style.display = "none";
-}
-
-function copyText() {
-    let text = document.getElementById("qrtext").value;
-    if(!text) return;
-    navigator.clipboard.writeText(text);
-    alert("Text Copied!");
-}
-
-function saveQR() {
-    let text = document.getElementById("qrtext").value;
-    if(!text) return;
-    let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
-    history.unshift({ text: text, date: new Date().toLocaleString() });
-    localStorage.setItem("qrhistory", JSON.stringify(history));
-    loadHistory();
+function saveToHistory() {
+    let val = document.getElementById("qr-input").value;
+    if(!val) return;
+    let hist = JSON.parse(localStorage.getItem("qr_hist") || "[]");
+    hist.unshift({text: val, date: new Date().toLocaleDateString()});
+    localStorage.setItem("qr_hist", JSON.stringify(hist));
     alert("Saved!");
+    renderHistory();
 }
 
-function loadHistory() {
-    let list = document.getElementById("historyList");
-    list.innerHTML = "";
-    let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
-
-    history.forEach((item, i) => {
-        let div = document.createElement("div");
-        div.className = "historyItem";
-        div.innerHTML = `
-            <strong>${item.date}</strong>
-            <span style="font-size:12px;opacity:0.7;word-break:break-all;">${item.text}</span>
-            <div class="btnrow">
-                <button class="share" onclick="captureHistory(${i})">Capture</button>
-                <button class="delete" onclick="deleteHistory(${i})">Delete</button>
-            </div>
-        `;
-        list.appendChild(div);
-    });
+function renderHistory() {
+    let list = document.getElementById("history-list");
+    let hist = JSON.parse(localStorage.getItem("qr_hist") || "[]");
+    list.innerHTML = hist.map(item => `
+        <div class="historyItem">
+            <div style="font-size:10px; opacity:0.5">${item.date}</div>
+            <div style="font-size:13px; margin:5px 0">${item.text}</div>
+        </div>
+    `).join('');
 }
 
-function captureHistory(i) {
-    let history = JSON.parse(localStorage.getItem("qrhistory"));
-    document.getElementById("qrtext").value = history[i].text;
-    openCapture();
-}
-
-function deleteHistory(i) {
-    let history = JSON.parse(localStorage.getItem("qrhistory"));
-    history.splice(i, 1);
-    localStorage.setItem("qrhistory", JSON.stringify(history));
-    loadHistory();
-}
-
-function clearHistory() {
-    if(confirm("Clear all?")) {
-        localStorage.removeItem("qrhistory");
-        loadHistory();
-    }
-}
-
-function openTab(name, el) {
-    document.getElementById("generator").style.display = (name === 'generator') ? "block" : "none";
-    document.getElementById("history").style.display = (name === 'history') ? "block" : "none";
+function switchTab(id, el) {
+    document.getElementById("generator-tab").style.display = "none";
+    document.getElementById("history-tab").style.display = "none";
+    document.getElementById(id).style.display = "block";
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     el.classList.add("active");
+    if(id === 'history-tab') renderHistory();
 }
 </script>
 
