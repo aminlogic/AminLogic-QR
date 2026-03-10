@@ -62,6 +62,12 @@ margin:0 0 8px 0;
 font-size:16px;
 }
 
+.card p{
+margin:0 0 14px 0;
+font-size:13px;
+opacity:.7;
+}
+
 textarea{
 width:100%;
 background:rgba(0,0,0,0.35);
@@ -83,13 +89,6 @@ background:white;
 display:flex;
 justify-content:center;
 min-height: 220px;
-position: relative;
-}
-
-/* Fix: Ensure the generated image fills the container */
-#qrcode img {
-    width: 220px;
-    height: 220px;
 }
 
 button{
@@ -109,10 +108,25 @@ margin-top:14px;
 flex-wrap:wrap;
 }
 
-.generate{ background:linear-gradient(135deg,#3da3ff,#216bff); color:white; }
-.share{ background:linear-gradient(135deg,#44ffb1,#1abf7e); color:#04281b; }
-.copy{ background:rgba(255,255,255,0.08); color:white; }
-.delete{ background:linear-gradient(135deg,#ff4e6b,#ff2747); color:white; }
+.generate{
+background:linear-gradient(135deg,#3da3ff,#216bff);
+color:white;
+}
+
+.share{
+background:linear-gradient(135deg,#44ffb1,#1abf7e);
+color:#04281b;
+}
+
+.copy{
+background:rgba(255,255,255,0.08);
+color:white;
+}
+
+.delete{
+background:linear-gradient(135deg,#ff4e6b,#ff2747);
+color:white;
+}
 
 .historyItem{
 background:rgba(255,255,255,0.04);
@@ -120,6 +134,18 @@ padding:14px;
 border-radius:14px;
 margin-top:12px;
 border:1px solid rgba(255,255,255,0.07);
+}
+
+.historyItem strong{
+font-size:13px;
+display:block;
+margin-bottom:6px;
+}
+
+.historyItem span{
+font-size:12px;
+opacity:.7;
+word-break:break-all;
 }
 
 .tabs{
@@ -144,36 +170,20 @@ cursor:pointer;
 font-weight:700;
 }
 
-.active{ background:#2b6fff; }
-
-/* Overlay for the 'Long Press to Save' fix */
-#downloadOverlay {
-    display: none;
-    position: fixed;
-    top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.9);
-    z-index: 1000;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+.active{
+background:#2b6fff;
 }
-#downloadOverlay img {
-    border: 10px solid white;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    max-width: 80%;
+
+footer{
+text-align:center;
+font-size:11px;
+opacity:.5;
+margin-top:12px;
 }
 </style>
 </head>
 
 <body>
-
-<div id="downloadOverlay" onclick="this.style.display='none'">
-    <p>LONG-PRESS IMAGE TO SAVE</p>
-    <div id="overlayImg"></div>
-    <p style="font-size: 12px; opacity: 0.7;">(Tap anywhere to close)</p>
-</div>
 
 <div class="container">
     <div class="header">
@@ -187,7 +197,8 @@ font-weight:700;
     <div id="generator">
         <div class="card">
             <h2>QR Code Generator</h2>
-            <textarea id="qrtext" placeholder="Enter URL or text..."></textarea>
+            <p>Create QR codes instantly and share anywhere.</p>
+            <textarea id="qrtext" placeholder="Enter URL, text, phone number, WiFi..."></textarea>
             
             <div class="btnrow">
                 <button class="generate" onclick="generateQR()">Generate</button>
@@ -199,19 +210,20 @@ font-weight:700;
             </div>
 
             <div class="btnrow">
-                <button class="share" onclick="openDownloadOverlay()">Download</button>
-                <button class="copy" onclick="saveToHistory()">Save History</button>
+                <button class="share" onclick="shareQR()">Share QR</button>
+                <button class="copy" onclick="saveQR()">Save History</button>
             </div>
         </div>
     </div>
 
     <div id="history" style="display:none">
         <div class="card">
-            <h2>History</h2>
+            <h2>Saved QR Codes</h2>
             <div id="historyList"></div>
             <div class="btnrow">
-                <button class="delete" onclick="clearHistory()">Clear All</button>
+                <button class="delete" onclick="clearHistory()">Clear History</button>
             </div>
+            <footer>AminLogic</footer>
         </div>
     </div>
 </div>
@@ -225,7 +237,6 @@ font-weight:700;
 let qr;
 
 window.onload = function() {
-    // Initial QR Code Generation
     qr = new QRCode(document.getElementById("qrcode"), {
         text: "https://aminlogic.com",
         width: 220,
@@ -244,23 +255,41 @@ function generateQR() {
     qr.makeCode(text);
 }
 
-function openDownloadOverlay() {
-    const canvas = document.querySelector("#qrcode canvas");
-    if(!canvas) return;
-    
-    const dataUrl = canvas.toDataURL("image/png");
-    document.getElementById("overlayImg").innerHTML = `<img src="${dataUrl}">`;
-    document.getElementById("downloadOverlay").style.display = "flex";
-}
-
 function copyText() {
     let text = document.getElementById("qrtext").value;
     if(!text) return;
     navigator.clipboard.writeText(text);
-    alert("Text copied!");
+    alert("Text Copied!");
 }
 
-function saveToHistory() {
+async function shareQR() {
+    const canvas = document.querySelector("#qrcode canvas");
+    if (!canvas) return;
+
+    try {
+        const dataUrl = canvas.toDataURL("image/png");
+        const blob = await (await fetch(dataUrl)).blob();
+        const file = new File([blob], 'qr-code.png', { type: 'image/png' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                files: [file],
+                title: 'AminLogic QR Code',
+                text: document.getElementById("qrtext").value
+            });
+        } else {
+            // Fallback for text-only sharing if files are blocked
+            await navigator.share({
+                title: 'AminLogic QR Code',
+                text: document.getElementById("qrtext").value
+            });
+        }
+    } catch (err) {
+        alert("Sharing is blocked by this app's browser. Try copying the link instead.");
+    }
+}
+
+function saveQR() {
     let text = document.getElementById("qrtext").value;
     if(!text) return;
     let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
@@ -272,28 +301,56 @@ function saveToHistory() {
 
 function loadHistory() {
     let list = document.getElementById("historyList");
+    list.innerHTML = "";
     let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
-    list.innerHTML = history.length ? "" : "<p style='text-align:center;opacity:0.5'>No history</p>";
 
     history.forEach((item, i) => {
         let div = document.createElement("div");
         div.className = "historyItem";
         div.innerHTML = `
-            <strong>${item.date}</strong><br>
-            <span style="font-size:12px;opacity:0.7;word-break:break-all;">${item.text}</span>
+            <strong>${item.date}</strong>
+            <span>${item.text}</span>
             <div class="btnrow">
-                <button class="generate" onclick="loadItem(${i})">Use</button>
+                <button class="share" onclick="shareHistory(${i})">Share</button>
+                <button class="copy" onclick="copyHistory(${i})">Copy</button>
                 <button class="delete" onclick="deleteHistory(${i})">Delete</button>
-            </div>`;
+            </div>
+        `;
         list.appendChild(div);
     });
 }
 
-function loadItem(i) {
+async function shareHistory(i) {
     let history = JSON.parse(localStorage.getItem("qrhistory"));
-    document.getElementById("qrtext").value = history[i].text;
-    generateQR();
-    openTab('generator', document.querySelectorAll('.tab')[0]);
+    let text = history[i].text;
+    
+    // We update the main QR generator hidden in background to get the canvas
+    qr.makeCode(text);
+    
+    // Tiny delay to allow canvas to update
+    setTimeout(async () => {
+        const canvas = document.querySelector("#qrcode canvas");
+        const dataUrl = canvas.toDataURL("image/png");
+        const blob = await (await fetch(dataUrl)).blob();
+        const file = new File([blob], 'qr-code.png', { type: 'image/png' });
+
+        if (navigator.share) {
+            navigator.share({
+                files: [file],
+                title: "AminLogic QR Code",
+                text: text
+            }).catch(() => {
+                // Fallback to text share if file fails
+                navigator.share({ text: text });
+            });
+        }
+    }, 100);
+}
+
+function copyHistory(i) {
+    let history = JSON.parse(localStorage.getItem("qrhistory"));
+    navigator.clipboard.writeText(history[i].text);
+    alert("Copied!");
 }
 
 function deleteHistory(i) {
@@ -304,15 +361,15 @@ function deleteHistory(i) {
 }
 
 function clearHistory() {
-    if(confirm("Clear all?")) {
+    if(confirm("Delete all history?")) {
         localStorage.removeItem("qrhistory");
         loadHistory();
     }
 }
 
 function openTab(name, el) {
-    document.getElementById("generator").style.display = name === "generator" ? "block" : "none";
-    document.getElementById("history").style.display = name === "history" ? "block" : "none";
+    document.getElementById("generator").style.display = (name === 'generator') ? "block" : "none";
+    document.getElementById("history").style.display = (name === 'history') ? "block" : "none";
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     el.classList.add("active");
 }
