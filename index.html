@@ -2,226 +2,87 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>AminLogic QR Generator</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
-body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:linear-gradient(180deg,#0d1222,#05070f);
-color:white;
-min-height: 100vh;
+body{ margin:0; font-family:Arial,sans-serif; background:#05070f; color:white; min-height:100vh; }
+.container{ max-width:520px; margin:auto; padding:16px; padding-bottom:100px; }
+.header{ display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+.logo{ width:48px; height:48px; border-radius:14px; }
+.title h1{ margin:0; font-size:18px; font-weight:800; }
+.title span{ font-size:12px; opacity:.6; }
+
+.card{ background:rgba(255,255,255,0.05); border-radius:20px; padding:18px; margin-bottom:16px; border:1px solid rgba(255,255,255,0.08); }
+textarea{ width:100%; background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:12px; color:white; box-sizing:border-box; min-height:80px; outline:none; }
+
+.qrbox{ margin-top:18px; padding:14px; border-radius:18px; background:white; display:flex; justify-content:center; }
+#qrcode img { display: block; } /* Ensure the generated image is visible */
+
+.btnrow{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+button{ border:none; border-radius:12px; padding:12px; font-weight:700; flex:1; cursor:pointer; }
+.generate{ background:#216bff; color:white; }
+.download{ background:#1abf7e; color:#04281b; }
+.copy{ background:rgba(255,255,255,0.1); color:white; }
+.delete{ background:#ff2747; color:white; }
+
+/* OVERLAY FOR DOWNLOADING */
+#downloadOverlay {
+    display: none;
+    position: fixed;
+    top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.95);
+    z-index: 1000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
 }
-
-.container{
-max-width:520px;
-margin:auto;
-padding:16px;
-padding-bottom:100px;
+#downloadOverlay img { 
+    max-width: 80%; 
+    border: 10px solid white; 
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
+#downloadOverlay p { font-size: 16px; font-weight: bold; margin-bottom: 20px; }
 
-.header{
-display:flex;
-align-items:center;
-gap:12px;
-margin-bottom:18px;
-}
+.historyItem{ background:rgba(255,255,255,0.04); padding:14px; border-radius:14px; margin-top:12px; border:1px solid rgba(255,255,255,0.07); }
+.historyItem span{ font-size:13px; word-break:break-all; display:block; margin: 8px 0; }
 
-.logo{
-width:48px;
-height:48px;
-border-radius:14px;
-box-shadow:0 6px 18px rgba(0,0,0,0.4);
-}
-
-.title h1{
-margin:0;
-font-size:18px;
-font-weight:800;
-}
-
-.title span{
-font-size:12px;
-opacity:.6;
-}
-
-.card{
-background:rgba(255,255,255,0.05);
-border-radius:20px;
-padding:18px;
-margin-bottom:16px;
-border:1px solid rgba(255,255,255,0.08);
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
-
-.card h2{
-margin:0 0 8px 0;
-font-size:16px;
-}
-
-.card p{
-margin:0 0 14px 0;
-font-size:13px;
-opacity:.7;
-}
-
-textarea{
-width:100%;
-background:rgba(0,0,0,0.35);
-border:1px solid rgba(255,255,255,0.1);
-border-radius:14px;
-padding:12px;
-color:white;
-font-size:14px;
-min-height:90px;
-box-sizing: border-box;
-outline: none;
-}
-
-.qrbox{
-margin-top:18px;
-padding:14px;
-border-radius:18px;
-background:white;
-display:flex;
-justify-content:center;
-min-height: 220px;
-}
-
-/* Invisible div for history generation */
-#temp-qr { display: none; }
-
-button{
-border:none;
-border-radius:14px;
-padding:12px 14px;
-font-weight:700;
-font-size:13px;
-cursor:pointer;
-flex:1;
-transition: transform 0.1s;
-}
-
-button:active { transform: scale(0.95); }
-
-.btnrow{
-display:flex;
-gap:8px;
-margin-top:14px;
-flex-wrap:wrap;
-}
-
-.generate{
-background:linear-gradient(135deg,#3da3ff,#216bff);
-color:white;
-}
-
-.download{
-background:linear-gradient(135deg,#44ffb1,#1abf7e);
-color:#04281b;
-}
-
-.copy{
-background:rgba(255,255,255,0.12);
-color:white;
-}
-
-.delete{
-background:linear-gradient(135deg,#ff4e6b,#ff2747);
-color:white;
-}
-
-.historyItem{
-background:rgba(255,255,255,0.04);
-padding:14px;
-border-radius:14px;
-margin-top:12px;
-border:1px solid rgba(255,255,255,0.07);
-}
-
-.historyItem strong{
-font-size:12px;
-display:block;
-margin-bottom:4px;
-opacity: 0.6;
-}
-
-.historyItem span{
-font-size:14px;
-font-weight: 500;
-word-break:break-all;
-display: block;
-margin-bottom: 10px;
-}
-
-.tabs{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#060912;
-padding:10px;
-display:flex;
-gap:10px;
-border-top:1px solid rgba(255,255,255,0.08);
-z-index: 100;
-}
-
-.tab{
-flex:1;
-text-align:center;
-padding:12px;
-border-radius:14px;
-background:rgba(255,255,255,0.05);
-cursor:pointer;
-font-weight:700;
-}
-
-.active{
-background:#2b6fff;
-}
-
-footer{
-text-align:center;
-font-size:11px;
-opacity:.5;
-margin-top:20px;
-}
+.tabs{ position:fixed; bottom:0; left:0; right:0; background:#060912; padding:10px; display:flex; gap:10px; border-top:1px solid rgba(255,255,255,0.08); }
+.tab{ flex:1; text-align:center; padding:12px; border-radius:14px; background:rgba(255,255,255,0.05); font-weight:700; }
+.active{ background:#2b6fff; }
 </style>
 </head>
 
 <body>
 
+<div id="downloadOverlay">
+    <p>Long-press the image below<br>to Save/Download to Gallery</p>
+    <div id="overlayImageContainer"></div>
+    <button class="delete" style="flex:none; width:200px;" onclick="closeOverlay()">Close</button>
+</div>
+
 <div class="container">
     <div class="header">
-        <img src="icon-512.png" class="logo" alt="logo">
-        <div class="title">
-            <h1>AminLogic QR Generator</h1>
-            <span>Create • Download • Save</span>
-        </div>
+        <img src="icon-512.png" class="logo">
+        <div class="title"><h1>AminLogic QR Generator</h1><span>Create • Save • Gallery</span></div>
     </div>
 
     <div id="generator">
         <div class="card">
-            <h2>QR Code Generator</h2>
-            <p>Generate high-quality QR codes and download them to your gallery.</p>
-            <textarea id="qrtext" placeholder="Enter URL or text here..."></textarea>
-            
+            <textarea id="qrtext" placeholder="Paste link or text..."></textarea>
             <div class="btnrow">
                 <button class="generate" onclick="generateQR()">Generate QR</button>
                 <button class="copy" onclick="copyText()">Copy Text</button>
             </div>
-
-            <div class="qrbox">
-                <div id="qrcode"></div>
-            </div>
-
+            <div class="qrbox"><div id="qrcode"></div></div>
             <div class="btnrow">
-                <button class="download" onclick="downloadMainQR()">Download QR</button>
-                <button class="copy" onclick="saveQR()">Save History</button>
+                <button class="download" onclick="prepareDownload()">Download QR</button>
+                <button class="copy" onclick="saveToHistory()">Save History</button>
             </div>
         </div>
     </div>
@@ -230,15 +91,10 @@ margin-top:20px;
         <div class="card">
             <h2>Saved History</h2>
             <div id="historyList"></div>
-            <div class="btnrow">
-                <button class="delete" onclick="clearHistory()">Clear All History</button>
-            </div>
-            <footer>AminLogic</footer>
+            <button class="delete" style="width:100%; margin-top:10px;" onclick="clearHistory()">Clear All</button>
         </div>
     </div>
 </div>
-
-<div id="temp-qr"></div>
 
 <div class="tabs">
     <div class="tab active" onclick="openTab('generator',this)">Generator</div>
@@ -246,121 +102,71 @@ margin-top:20px;
 </div>
 
 <script>
-let qrInstance;
-
+let qr;
 window.onload = function() {
-    qrInstance = new QRCode(document.getElementById("qrcode"), {
+    qr = new QRCode(document.getElementById("qrcode"), {
         text: "https://aminlogic.com",
-        width: 256,
-        height: 256,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
+        width: 256, height: 256,
+        colorDark: "#000000", colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
     });
     loadHistory();
 };
 
 function generateQR() {
-    let text = document.getElementById("qrtext").value;
-    if (!text) return;
-    qrInstance.clear();
-    qrInstance.makeCode(text);
+    let val = document.getElementById("qrtext").value;
+    if(val) qr.makeCode(val);
 }
 
-// Function to handle the actual downloading logic
-async function triggerDownload(canvas, filename) {
-    try {
-        const dataUrl = canvas.toDataURL("image/png");
-        const link = document.createElement('a');
-        link.href = dataUrl;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    } catch (e) {
-        // Fallback for some mobile browsers
-        window.open(canvas.toDataURL("image/png"), '_blank');
-    }
-}
-
-function downloadMainQR() {
+function prepareDownload(manualText = null) {
     const canvas = document.querySelector("#qrcode canvas");
-    if (!canvas) {
-        alert("Please generate a QR code first.");
-        return;
-    }
-    triggerDownload(canvas, 'aminlogic-qr.png');
-}
-
-function downloadHistoryQR(text) {
-    const tempDiv = document.getElementById("temp-qr");
-    tempDiv.innerHTML = ""; // Clear
+    if (!canvas) return;
     
-    // Create a temporary QR code
-    new QRCode(tempDiv, {
-        text: text,
-        width: 512, // Higher resolution for downloads
-        height: 512,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
-
-    // Wait a tiny bit for the library to render the canvas
-    setTimeout(() => {
-        const canvas = tempDiv.querySelector("canvas");
-        triggerDownload(canvas, 'saved-qr.png');
-    }, 100);
+    // Create a real <img> tag from the canvas
+    const imgData = canvas.toDataURL("image/png");
+    const container = document.getElementById("overlayImageContainer");
+    container.innerHTML = `<img src="${imgData}" alt="QR Code">`;
+    
+    document.getElementById("downloadOverlay").style.display = "flex";
 }
 
-function copyText() {
-    let text = document.getElementById("qrtext").value;
-    if(!text) return;
-    navigator.clipboard.writeText(text).then(() => alert("Copied to clipboard!"));
+function closeOverlay() {
+    document.getElementById("downloadOverlay").style.display = "none";
 }
 
-function saveQR() {
+function saveToHistory() {
     let text = document.getElementById("qrtext").value;
     if (!text) return;
     let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
     history.unshift({ text: text, date: new Date().toLocaleString() });
     localStorage.setItem("qrhistory", JSON.stringify(history));
     loadHistory();
-    alert("Saved to history!");
+    alert("Saved!");
 }
 
 function loadHistory() {
     let list = document.getElementById("historyList");
-    list.innerHTML = "";
     let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
+    list.innerHTML = history.length ? "" : "<p style='opacity:0.5'>No items.</p>";
     
-    if(history.length === 0) {
-        list.innerHTML = "<p style='text-align:center;opacity:0.5;'>No history yet.</p>";
-        return;
-    }
-
     history.forEach((item, i) => {
         let div = document.createElement("div");
         div.className = "historyItem";
-        // We escape the text for the onclick function to avoid syntax errors
-        const escapedText = item.text.replace(/'/g, "\\'");
-        
         div.innerHTML = `
             <strong>${item.date}</strong>
             <span>${item.text}</span>
             <div class="btnrow">
-                <button class="download" onclick="downloadHistoryQR('${escapedText}')">Download</button>
-                <button class="copy" onclick="copyHistory(${i})">Copy</button>
+                <button class="download" onclick="downloadFromHistory('${item.text.replace(/'/g, "\\'")}')">Download</button>
                 <button class="delete" onclick="deleteHistory(${i})">Delete</button>
-            </div>
-        `;
+            </div>`;
         list.appendChild(div);
     });
 }
 
-function copyHistory(i) {
-    let history = JSON.parse(localStorage.getItem("qrhistory"));
-    navigator.clipboard.writeText(history[i].text).then(() => alert("Text copied!"));
+function downloadFromHistory(text) {
+    // Temporarily update main QR to get the correct canvas
+    qr.makeCode(text);
+    setTimeout(prepareDownload, 100);
 }
 
 function deleteHistory(i) {
@@ -370,21 +176,20 @@ function deleteHistory(i) {
     loadHistory();
 }
 
-function clearHistory() {
-    if(confirm("Permanently delete all saved QR codes?")) {
-        localStorage.removeItem("qrhistory");
-        loadHistory();
-    }
-}
+function clearHistory() { if(confirm("Clear all?")) { localStorage.removeItem("qrhistory"); loadHistory(); } }
 
 function openTab(name, el) {
-    document.getElementById("generator").style.display = "none";
-    document.getElementById("history").style.display = "none";
+    document.getElementById("generator").style.display = name === "generator" ? "block" : "none";
+    document.getElementById("history").style.display = name === "history" ? "block" : "none";
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    document.getElementById(name).style.display = "block";
     el.classList.add("active");
 }
-</script>
 
+function copyText() {
+    let text = document.getElementById("qrtext").value;
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+}
+</script>
 </body>
 </html>
