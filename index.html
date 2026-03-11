@@ -9,343 +9,468 @@
 
 <style>
 :root {
-    --primary: #2b6fff;
-    --primary-grad: linear-gradient(135deg, #3da3ff, #216bff);
-    --success-grad: linear-gradient(135deg, #44ffb1, #1abf7e);
-    --danger-grad: linear-gradient(135deg, #ff4e6b, #ff2747);
-    --card-bg: rgba(255, 255, 255, 0.06);
-    --border: rgba(255, 255, 255, 0.1);
+    --primary:#2b6fff;
+    --primary-grad:linear-gradient(135deg,#3da3ff,#216bff);
+    --success-grad:linear-gradient(135deg,#44ffb1,#1abf7e);
+    --danger-grad:linear-gradient(135deg,#ff4e6b,#ff2747);
+    --card-bg:rgba(255,255,255,0.06);
+    --border:rgba(255,255,255,0.1);
 }
 
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: radial-gradient(circle at top, #1a233a 0%, #05070f 100%);
-    color: white;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+body{
+margin:0;
+font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+background:radial-gradient(circle at top,#1a233a 0%,#05070f 100%);
+color:white;
+min-height:100vh;
+display:flex;
+flex-direction:column;
 }
 
-.container {
-    max-width: 500px;
-    margin: auto;
-    padding: 20px;
-    padding-bottom: 120px;
-    flex: 1;
+.container{
+max-width:500px;
+margin:auto;
+padding:18px;
+padding-bottom:100px;
+flex:1;
 }
 
-.header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 25px;
-    padding: 10px 0;
+.header{
+display:flex;
+align-items:center;
+gap:14px;
+margin-bottom:18px;
 }
 
-.logo {
-    width: 54px;
-    height: 54px;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+.logo{
+width:54px;
+height:54px;
+border-radius:16px;
+box-shadow:0 8px 24px rgba(0,0,0,0.5);
 }
 
-.title h1 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+.title h1{
+margin:0;
+font-size:22px;
+font-weight:800;
+letter-spacing:-0.5px;
 }
 
-.title span {
-    font-size: 13px;
-    color: #3da3ff;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.title span{
+font-size:13px;
+color:#3da3ff;
+font-weight:600;
+text-transform:uppercase;
+letter-spacing:1px;
 }
 
-.card {
-    background: var(--card-bg);
-    border-radius: 24px;
-    padding: 24px;
-    margin-bottom: 20px;
-    border: 1px solid var(--border);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
+.card{
+background:var(--card-bg);
+border-radius:24px;
+padding:22px;
+margin-bottom:15px;
+border:1px solid var(--border);
+box-shadow:0 15px 35px rgba(0,0,0,0.4);
+backdrop-filter:blur(10px);
 }
 
-.card h2 {
-    margin: 0 0 8px 0;
-    font-size: 19px;
+.card h2{
+margin:0 0 6px 0;
+font-size:19px;
 }
 
-.description {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 20px;
-    line-height: 1.5;
+.description{
+font-size:14px;
+color:rgba(255,255,255,0.6);
+margin-bottom:16px;
+line-height:1.5;
 }
 
-textarea {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 16px;
-    color: white;
-    font-size: 15px;
-    min-height: 110px;
-    box-sizing: border-box;
-    outline: none;
-    transition: 0.3s;
-    resize: none;
+textarea{
+width:100%;
+background:rgba(0,0,0,0.4);
+border:1px solid var(--border);
+border-radius:16px;
+padding:16px;
+color:white;
+font-size:15px;
+min-height:100px;
+box-sizing:border-box;
+outline:none;
+resize:none;
+transition:0.3s;
 }
 
-textarea:focus { border-color: var(--primary); background: rgba(0,0,0,0.5); }
-
-.qrbox {
-    margin-top: 25px;
-    padding: 25px;
-    border-radius: 24px;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+textarea:focus{
+border-color:var(--primary);
+background:rgba(0,0,0,0.5);
 }
 
-.branding-tag {
-    color: #05070f;
-    font-size: 12px;
-    font-weight: 900;
-    margin-top: 12px;
-    letter-spacing: 3px;
-    opacity: 0.9;
+.qrbox{
+margin-top:18px;
+padding:22px;
+border-radius:24px;
+background:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
 }
 
-button {
-    border: none;
-    border-radius: 16px;
-    padding: 15px;
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-    flex: 1;
-    transition: 0.2s;
+.branding-tag{
+color:#05070f;
+font-size:12px;
+font-weight:900;
+margin-top:10px;
+letter-spacing:3px;
+opacity:0.9;
 }
 
-button:active { transform: scale(0.97); }
-
-.btnrow { display: flex; gap: 12px; margin-top: 18px; }
-.generate { background: var(--primary-grad); color: white; }
-.share { background: var(--success-grad); color: #04281b; }
-.copy { background: rgba(255, 255, 255, 0.1); color: white; }
-.delete { background: var(--danger-grad); color: white; }
-
-.historyItem {
-    background: rgba(255, 255, 255, 0.04);
-    padding: 18px;
-    border-radius: 20px;
-    margin-bottom: 14px;
-    border: 1px solid var(--border);
+button{
+border:none;
+border-radius:16px;
+padding:14px;
+font-weight:700;
+font-size:14px;
+cursor:pointer;
+flex:1;
+transition:0.2s;
 }
 
-.history-meta { display: flex; justify-content: space-between; font-size: 12px; color: #3da3ff; margin-bottom: 8px; font-weight: 600; }
-.history-text { font-size: 14px; opacity: 0.9; word-break: break-all; line-height: 1.4; display: block; margin-bottom: 12px; }
+button:active{transform:scale(0.97);}
 
-.tabs {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(6, 9, 18, 0.98);
-    padding: 15px 20px;
-    display: flex;
-    gap: 15px;
-    border-top: 1px solid var(--border);
-    z-index: 100;
+.btnrow{
+display:flex;
+gap:10px;
+margin-top:14px;
 }
 
-.tab { flex: 1; text-align: center; padding: 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.05); cursor: pointer; font-weight: 700; color: rgba(255, 255, 255, 0.5); }
-.tab.active { background: var(--primary); color: white; }
+.generate{background:var(--primary-grad);color:white;}
+.share{background:var(--success-grad);color:#04281b;}
+.copy{background:rgba(255,255,255,0.1);color:white;}
+.delete{background:var(--danger-grad);color:white;}
 
-.web-footer {
-    text-align: center;
-    padding-bottom: 85px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 1px;
+.historyItem{
+background:rgba(255,255,255,0.04);
+padding:18px;
+border-radius:20px;
+margin-bottom:14px;
+border:1px solid var(--border);
 }
 
-.web-footer a { color: #3da3ff; text-decoration: none; opacity: 0.8; }
-
-#screenshot-overlay {
-    display: none;
-    position: fixed;
-    top:0; left:0; width:100vw; height:100vh;
-    background: white;
-    z-index: 9999;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.history-meta{
+display:flex;
+justify-content:space-between;
+font-size:12px;
+color:#3da3ff;
+margin-bottom:8px;
+font-weight:600;
 }
-.close-overlay { position: absolute; bottom: 50px; background: #05070f; color: white; padding: 16px 40px; border-radius: 50px; font-weight: bold; border: none; }
+
+.history-text{
+font-size:14px;
+opacity:0.9;
+word-break:break-all;
+line-height:1.4;
+display:block;
+margin-bottom:12px;
+}
+
+.tabs{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:rgba(6,9,18,0.98);
+padding:14px 18px;
+display:flex;
+gap:12px;
+border-top:1px solid var(--border);
+z-index:100;
+}
+
+.tab{
+flex:1;
+text-align:center;
+padding:14px;
+border-radius:16px;
+background:rgba(255,255,255,0.05);
+cursor:pointer;
+font-weight:700;
+color:rgba(255,255,255,0.5);
+}
+
+.tab.active{
+background:var(--primary);
+color:white;
+}
+
+#screenshot-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100vw;
+height:100vh;
+background:white;
+z-index:9999;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+}
+
+.close-overlay{
+position:absolute;
+bottom:50px;
+background:#05070f;
+color:white;
+padding:16px 40px;
+border-radius:50px;
+font-weight:bold;
+border:none;
+}
 </style>
 </head>
 
 <body>
 
 <div id="screenshot-overlay">
-    <div style="color: #999; margin-bottom: 25px; font-weight: bold; letter-spacing: 1px;">PREVIEW & CAPTURE</div>
-    <div id="overlay-qr-space" style="padding: 20px; background: white;"></div>
-    <div style="color: #000; margin-top: 25px; font-weight: 900; letter-spacing: 4px; font-size: 16px;">AMINLOGIC</div>
-    <button class="close-overlay" onclick="closeCapture()">Return to App</button>
+<div style="color:#999;margin-bottom:25px;font-weight:bold;letter-spacing:1px;">PREVIEW & CAPTURE</div>
+<div id="overlay-qr-space" style="padding:20px;background:white;"></div>
+<div style="color:#000;margin-top:25px;font-weight:900;letter-spacing:4px;font-size:16px;">AMINLOGIC</div>
+<button class="close-overlay" onclick="closeCapture()">Return to App</button>
 </div>
 
-<div class="container" id="main-ui">
-    <div class="header">
-        <img src="icon-512.png" class="logo">
-        <div class="title">
-            <h1>AminLogic QR</h1>
-            <span>Instant QR. Infinite Possibilities.</span>
-        </div>
-    </div>
+<div class="container">
 
-    <div id="generator">
-        <div class="card">
-            <h2>Create New Code</h2>
-            <p class="description">Generate high-resolution QR codes for websites, encrypted text, or digital business cards. Secure, fast, and ready for sharing.</p>
-            
-            <textarea id="qrtext" placeholder="Enter your destination URL or secret message here..."></textarea>
-            
-            <div class="btnrow">
-                <button class="generate" onclick="generateQR()">Generate Code</button>
-                <button class="copy" onclick="copyText()">Copy Input</button>
-            </div>
-
-            <div class="qrbox">
-                <div id="qrcode"></div>
-                <div class="branding-tag">AMINLOGIC PREMIERE</div>
-            </div>
-
-            <div class="btnrow" style="margin-top: 25px;">
-                <button class="share" onclick="openCapture()">Capture & Save</button>
-                <button class="copy" onclick="saveQR()">Store in History</button>
-            </div>
-        </div>
-        <p style="text-align:center; font-size: 12px; opacity: 0.5; padding: 0 20px; line-height: 1.5;">Use Capture Mode to generate a clean, high-contrast image perfect for your camera roll or sharing on social media.</p>
-    </div>
-
-    <div id="history" style="display:none">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin:0">Vault</h2>
-            <span id="historyCount" style="background: #216bff; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">0 Items</span>
-        </div>
-        
-        <div id="historyList"></div>
-
-        <div id="emptyHistory" style="text-align: center; padding: 60px 20px; opacity: 0.4;">
-            <p>Your digital vault is empty. Generate and save QR codes to see them here for future use.</p>
-        </div>
-
-        <div class="btnrow" id="clearBtnRow" style="display:none; margin-top: 20px;">
-            <button class="delete" onclick="clearHistory()">Wipe All Records</button>
-        </div>
-    </div>
+<div class="header">
+<img src="icon-512.png" class="logo">
+<div class="title">
+<h1>AminLogic QR</h1>
+<span>Instant QR. Infinite Possibilities.</span>
+</div>
 </div>
 
-<div class="web-footer">
-    <a href="https://aminlogic.com" target="_blank">aminlogic.com</a>
+<div id="generator">
+
+<div class="card">
+<h2>Create New Code</h2>
+<p class="description">Generate QR codes instantly from any website link or plain text message. Perfect for sharing URLs, notes, or digital information.</p>
+
+<textarea id="qrtext" placeholder="Enter a website URL or any text you want to convert into a QR code..."></textarea>
+
+<div class="btnrow">
+<button class="generate" onclick="generateQR()">Generate Code</button>
+<button class="copy" onclick="copyText()">Copy Input</button>
+</div>
+
+<div class="qrbox">
+<div id="qrcode"></div>
+<div class="branding-tag">AMINLOGIC PREMIERE</div>
+</div>
+
+<div class="btnrow" style="margin-top:18px;">
+<button class="share" onclick="openCapture()">Capture & Save</button>
+<button class="copy" onclick="saveQR()">Store in History</button>
+</div>
+
+</div>
+
+</div>
+
+<div id="history" style="display:none">
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+<h2 style="margin:0">History</h2>
+<span id="historyCount" style="background:#216bff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;">0 Items</span>
+</div>
+
+<div id="historyList"></div>
+
+<div id="emptyHistory" style="text-align:center;padding:60px 20px;opacity:0.4;">
+<p>Your history is empty. Generate and save QR codes to see them here.</p>
+</div>
+
+<div class="btnrow" id="clearBtnRow" style="display:none;margin-top:20px;">
+<button class="delete" onclick="clearHistory()">Clear All History</button>
+</div>
+
+</div>
+
 </div>
 
 <div class="tabs">
-    <div class="tab active" onclick="openTab('generator',this)">Create</div>
-    <div class="tab" onclick="openTab('history',this)">Vault</div>
+<div class="tab active" onclick="openTab('generator',this)">Create</div>
+<div class="tab" onclick="openTab('history',this)">History</div>
 </div>
 
 <script>
+
 let qr;
-window.onload = function() {
-    qr = new QRCode(document.getElementById("qrcode"), {
-        text: "https://aminlogic.com",
-        width: 240, height: 240,
-        colorDark: "#000000", colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
-    loadHistory();
+
+window.onload=function(){
+qr=new QRCode(document.getElementById("qrcode"),{
+text:"QR Code",
+width:240,
+height:240,
+colorDark:"#000000",
+colorLight:"#ffffff",
+correctLevel:QRCode.CorrectLevel.H
+});
+loadHistory();
 };
 
-function generateQR() {
-    let text = document.getElementById("qrtext").value;
-    if(!text) { alert("Please enter text or a URL first."); return; }
-    qr.makeCode(text);
+function generateQR(){
+let text=document.getElementById("qrtext").value;
+if(!text){alert("Please enter a URL or text first.");return;}
+qr.makeCode(text);
 }
 
-function openCapture() {
-    const text = document.getElementById("qrtext").value || "https://aminlogic.com";
-    const overlaySpace = document.getElementById("overlay-qr-space");
-    overlaySpace.innerHTML = "";
-    new QRCode(overlaySpace, { text: text, width: 280, height: 280, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
-    document.getElementById("screenshot-overlay").style.display = "flex";
+function openCapture(){
+
+const text=document.getElementById("qrtext").value || "QR Code";
+
+const overlaySpace=document.getElementById("overlay-qr-space");
+overlaySpace.innerHTML="";
+
+new QRCode(overlaySpace,{
+text:text,
+width:280,
+height:280,
+colorDark:"#000000",
+colorLight:"#ffffff",
+correctLevel:QRCode.CorrectLevel.H
+});
+
+document.getElementById("screenshot-overlay").style.display="flex";
 }
 
-function closeCapture() { document.getElementById("screenshot-overlay").style.display = "none"; }
-function copyText() { let text = document.getElementById("qrtext").value; if(!text) return; navigator.clipboard.writeText(text); alert("Input copied!"); }
-
-function saveQR() {
-    let text = document.getElementById("qrtext").value;
-    if(!text) return;
-    let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
-    if(history.length > 0 && history[0].text === text) return;
-    history.unshift({ text: text, date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
-    localStorage.setItem("qrhistory", JSON.stringify(history.slice(0, 30)));
-    loadHistory();
-    alert("Saved to Vault!");
+function closeCapture(){
+document.getElementById("screenshot-overlay").style.display="none";
 }
 
-function loadHistory() {
-    let list = document.getElementById("historyList");
-    let empty = document.getElementById("emptyHistory");
-    let clearBtn = document.getElementById("clearBtnRow");
-    let countLabel = document.getElementById("historyCount");
-    list.innerHTML = "";
-    let history = JSON.parse(localStorage.getItem("qrhistory") || "[]");
-    countLabel.innerText = history.length + " Items";
-    if(history.length === 0) { empty.style.display = "block"; clearBtn.style.display = "none"; } 
-    else {
-        empty.style.display = "none"; clearBtn.style.display = "flex";
-        history.forEach((item, i) => {
-            let div = document.createElement("div");
-            div.className = "historyItem";
-            div.innerHTML = `<div class="history-meta"><span>${item.date}</span></div><span class="history-text">${item.text}</span>
-                <div class="btnrow"><button class="generate" onclick="captureHistory(${i})" style="padding: 10px; font-size: 12px;">Capture</button>
-                <button class="delete" onclick="deleteHistory(${i})" style="padding: 10px; font-size: 12px; background: rgba(255,78,107,0.1); color: #ff4e6b;">Remove</button></div>`;
-            list.appendChild(div);
-        });
-    }
+function copyText(){
+let text=document.getElementById("qrtext").value;
+if(!text)return;
+navigator.clipboard.writeText(text);
+alert("Input copied!");
 }
 
-function captureHistory(i) {
-    let history = JSON.parse(localStorage.getItem("qrhistory"));
-    document.getElementById("qrtext").value = history[i].text;
-    qr.makeCode(history[i].text);
-    openCapture();
+function saveQR(){
+
+let text=document.getElementById("qrtext").value;
+if(!text)return;
+
+let history=JSON.parse(localStorage.getItem("qrhistory")||"[]");
+
+if(history.length>0 && history[0].text===text)return;
+
+history.unshift({
+text:text,
+date:new Date().toLocaleDateString()+" "+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
+});
+
+localStorage.setItem("qrhistory",JSON.stringify(history.slice(0,30)));
+
+loadHistory();
+
+alert("Saved to History!");
+
 }
 
-function deleteHistory(i) {
-    let history = JSON.parse(localStorage.getItem("qrhistory"));
-    history.splice(i, 1);
-    localStorage.setItem("qrhistory", JSON.stringify(history));
-    loadHistory();
+function loadHistory(){
+
+let list=document.getElementById("historyList");
+let empty=document.getElementById("emptyHistory");
+let clearBtn=document.getElementById("clearBtnRow");
+let countLabel=document.getElementById("historyCount");
+
+list.innerHTML="";
+
+let history=JSON.parse(localStorage.getItem("qrhistory")||"[]");
+
+countLabel.innerText=history.length+" Items";
+
+if(history.length===0){
+
+empty.style.display="block";
+clearBtn.style.display="none";
+
+}else{
+
+empty.style.display="none";
+clearBtn.style.display="flex";
+
+history.forEach((item,i)=>{
+
+let div=document.createElement("div");
+
+div.className="historyItem";
+
+div.innerHTML=`
+<div class="history-meta"><span>${item.date}</span></div>
+<span class="history-text">${item.text}</span>
+<div class="btnrow">
+<button class="generate" onclick="captureHistory(${i})" style="padding:10px;font-size:12px;">Capture</button>
+<button class="delete" onclick="deleteHistory(${i})" style="padding:10px;font-size:12px;background:rgba(255,78,107,0.1);color:#ff4e6b;">Remove</button>
+</div>`;
+
+list.appendChild(div);
+
+});
+
 }
 
-function clearHistory() { if(confirm("Clear all vault records?")) { localStorage.removeItem("qrhistory"); loadHistory(); } }
-
-function openTab(name, el) {
-    document.getElementById("generator").style.display = (name === 'generator') ? "block" : "none";
-    document.getElementById("history").style.display = (name === 'history') ? "block" : "none";
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    el.classList.add("active");
 }
+
+function captureHistory(i){
+
+let history=JSON.parse(localStorage.getItem("qrhistory"));
+
+document.getElementById("qrtext").value=history[i].text;
+
+qr.makeCode(history[i].text);
+
+openCapture();
+
+}
+
+function deleteHistory(i){
+
+let history=JSON.parse(localStorage.getItem("qrhistory"));
+
+history.splice(i,1);
+
+localStorage.setItem("qrhistory",JSON.stringify(history));
+
+loadHistory();
+
+}
+
+function clearHistory(){
+
+if(confirm("Clear all history records?")){
+
+localStorage.removeItem("qrhistory");
+
+loadHistory();
+
+}
+
+}
+
+function openTab(name,el){
+
+document.getElementById("generator").style.display=(name==='generator')?"block":"none";
+
+document.getElementById("history").style.display=(name==='history')?"block":"none";
+
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+
+el.classList.add("active");
+
+}
+
 </script>
 
 </body>
