@@ -9,20 +9,21 @@
 
 <style>
 :root {
+    --primary: #2b6fff;
     --primary-grad: linear-gradient(135deg, #3da3ff, #216bff);
     --accent-grad: linear-gradient(135deg, #44ffb1, #1abf7e);
-    --danger-grad: linear-gradient(135deg, #ff4e6b, #ff2747);
-    --card-bg: rgba(255, 255, 255, 0.07);
-    --border: rgba(255, 255, 255, 0.12);
+    --danger: #ff4e6b;
+    --card-bg: rgba(255, 255, 255, 0.08);
+    --border: rgba(255, 255, 255, 0.15);
 }
 
 body {
     margin: 0;
-    font-family: 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: radial-gradient(circle at top, #1a233a 0%, #05070f 100%);
     color: white;
     height: 100vh;
-    overflow: hidden; /* Fixes layout to one page */
+    overflow: hidden; /* Strictly no scrolling */
     display: flex;
     flex-direction: column;
 }
@@ -30,61 +31,88 @@ body {
 .container {
     max-width: 450px;
     margin: 0 auto;
-    padding: 10px 15px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     height: 100%;
     box-sizing: border-box;
 }
 
+/* Header Section */
 .header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
+    gap: 15px;
+    margin-bottom: 12px;
     flex-shrink: 0;
 }
 
-.logo-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--primary-grad); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-
-.title h1 { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
-.title span { font-size: 10px; color: #3da3ff; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-
-.card {
-    background: var(--card-bg);
-    border-radius: 20px;
-    padding: 15px;
-    border: 1px solid var(--border);
-    backdrop-filter: blur(15px);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    flex: 1;
-    justify-content: space-between;
+.logo-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
 }
 
-.description { font-size: 12px; color: rgba(255, 255, 255, 0.5); line-height: 1.4; margin: 0; }
+.title-group h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.title-group span {
+    font-size: 11px;
+    color: #3da3ff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Main UI Card */
+.card {
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.intro-text {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.4;
+    margin: 0;
+}
 
 textarea {
     width: 100%;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 12px;
+    border-radius: 15px;
+    padding: 14px;
     color: white;
-    font-size: 14px;
-    height: 65px;
+    font-size: 15px;
+    height: 80px;
     box-sizing: border-box;
     outline: none;
     resize: none;
     transition: 0.3s;
 }
-textarea:focus { border-color: #3da3ff; background: rgba(0,0,0,0.6); }
 
-.qrbox {
-    padding: 12px;
-    border-radius: 18px;
+textarea:focus { border-color: var(--primary); background: rgba(0,0,0,0.6); }
+
+/* QR Center Box */
+.qr-display-container {
     background: white;
+    padding: 15px;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -93,178 +121,313 @@ textarea:focus { border-color: #3da3ff; background: rgba(0,0,0,0.6); }
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.branding-tag { color: #000; font-size: 10px; font-weight: 900; margin-top: 6px; letter-spacing: 3px; }
+.qr-branding {
+    color: #000;
+    font-size: 11px;
+    font-weight: 900;
+    margin-top: 8px;
+    letter-spacing: 3px;
+}
 
-button { border: none; border-radius: 14px; padding: 12px; font-weight: 700; font-size: 13px; cursor: pointer; flex: 1; transition: 0.2s; }
+/* Buttons */
+.btn-row { display: flex; gap: 10px; }
+
+button {
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    flex: 1;
+    transition: transform 0.1s;
+}
+
 button:active { transform: scale(0.96); }
 
-.btnrow { display: flex; gap: 10px; }
-.btn-gen { background: var(--primary-grad); color: white; }
-.btn-sec { background: rgba(255, 255, 255, 0.1); color: white; }
-.btn-cap { background: var(--accent-grad); color: #04281b; }
+.btn-primary { background: var(--primary-grad); color: white; }
+.btn-accent { background: var(--accent-grad); color: #04281b; }
+.btn-ghost { background: rgba(255, 255, 255, 0.1); color: white; }
+.btn-danger { background: rgba(255, 78, 107, 0.1); color: var(--danger); border: 1px solid rgba(255, 78, 107, 0.2); }
 
 /* History Section */
-#history { display:none; flex-direction: column; flex: 1; overflow: hidden; }
-#historyList { flex: 1; overflow-y: auto; margin-top: 5px; }
-.historyItem { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 16px; margin-bottom: 8px; border: 1px solid var(--border); }
-.history-text { font-size: 13px; opacity: 0.8; word-break: break-all; display: block; margin-bottom: 8px; }
+#history-view {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
 
-/* Bottom Tabs */
-.tabs { background: #060912; padding: 12px 20px; display: flex; gap: 12px; border-top: 1px solid var(--border); }
-.tab { flex: 1; text-align: center; padding: 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.05); cursor: pointer; font-weight: 700; color: rgba(255, 255, 255, 0.4); font-size: 13px; }
-.tab.active { background: #2b6fff; color: white; }
+#history-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 10px;
+}
 
-/* Capture Mode Overlay */
-#capture-overlay {
+.history-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+}
+
+.history-content {
+    font-size: 14px;
+    opacity: 0.8;
+    word-break: break-all;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Bottom Navigation */
+.nav-tabs {
+    background: #060912;
+    padding: 12px 20px;
+    display: flex;
+    gap: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.tab-item {
+    flex: 1;
+    text-align: center;
+    padding: 14px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 14px;
+}
+
+.tab-item.active { background: var(--primary); color: white; }
+
+/* Capture Overlay (Matching your image) */
+#capture-view {
     display: none;
     position: fixed;
-    top:0; left:0; width:100vw; height:100vh;
+    top: 0; left: 0; width: 100vw; height: 100vh;
     background: white;
-    z-index: 10000;
+    z-index: 9999;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
-.cap-title { color: #000; font-weight: 800; font-size: 20px; margin-bottom: 5px; }
-.cap-hint { color: #666; font-size: 13px; font-weight: 600; margin-bottom: 25px; }
 
-.close-btn { margin-top: 40px; background: #000; color: white; padding: 15px 45px; border-radius: 50px; font-weight: bold; border: none; }
+.cap-header {
+    color: #999;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    font-size: 14px;
+}
+
+.cap-instruction {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.cap-qr-wrapper {
+    padding: 10px;
+    background: white;
+}
+
+.cap-footer-brand {
+    color: #000;
+    font-weight: 900;
+    letter-spacing: 5px;
+    margin-top: 40px;
+    font-size: 16px;
+}
+
+.cap-close-btn {
+    margin-top: 60px;
+    background: #000;
+    color: white;
+    padding: 16px 50px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 14px;
+}
 </style>
 </head>
 
 <body>
 
-<div id="capture-overlay">
-    <p class="cap-title">QR Code Preview</p>
-    <p class="cap-hint">(Please screenshot to save your code)</p>
-    
-    <div id="overlay-qr-space" style="padding: 20px; background: white; border: 1px solid #eee; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.05);"></div>
-    
-    <div style="color: #000; margin-top: 25px; font-weight: 900; letter-spacing: 5px; font-size: 14px;">AMINLOGIC</div>
-    
-    <button class="close-btn" onclick="closeCapture()">Return to App</button>
+<div id="capture-view">
+    <div class="cap-header">PREVIEW & CAPTURE</div>
+    <div class="cap-instruction">(Please screenshot to save)</div>
+    <div class="cap-qr-wrapper" id="capture-qr-target"></div>
+    <div class="cap-footer-brand">AMINLOGIC</div>
+    <button class="cap-close-btn" onclick="closeCapture()">Return to App</button>
 </div>
 
 <div class="container">
     <div class="header">
-        <div class="logo-icon"></div>
-        <div class="title">
+        <img src="icon-512.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+        <div class="title-group">
             <h1>AminLogic QR</h1>
             <span>Instant QR. Infinite Possibilities.</span>
         </div>
     </div>
 
-    <div id="generator" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+    <div id="generator-view" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
         <div class="card">
             <div>
-                <p class="description">Generate high-fidelity QR codes for any URL or text content in seconds.</p>
-                <textarea id="qrtext" placeholder="Paste your link or type text here..."></textarea>
-                <div class="btnrow" style="margin-top: 10px;">
-                    <button class="btn-gen" onclick="generateQR()">Generate Now</button>
-                    <button class="btn-sec" onclick="copyInput()">Copy Text</button>
+                <p class="intro-text">Create high-resolution QR codes for websites, text, or social profiles instantly.</p>
+                <textarea id="qr-input" placeholder="Paste your URL or type content here..."></textarea>
+                <div class="btn-row" style="margin-top: 10px;">
+                    <button class="btn-primary" onclick="generateNow()">Generate Code</button>
+                    <button class="btn-ghost" onclick="copyInput()">Copy Text</button>
                 </div>
             </div>
 
-            <div class="qrbox">
-                <div id="qrcode"></div>
-                <div class="branding-tag">AMINLOGIC</div>
+            <div class="qr-display-container">
+                <div id="main-qr-box"></div>
+                <div class="qr-branding">AMINLOGIC</div>
             </div>
 
-            <div class="btnrow">
-                <button class="btn-cap" onclick="openCapture()">Capture Mode</button>
-                <button class="btn-sec" onclick="saveToVault()">Save to Vault</button>
+            <div class="btn-row">
+                <button class="btn-accent" onclick="openCapture()">Capture Mode</button>
+                <button class="btn-ghost" onclick="saveHistory()">Save to History</button>
             </div>
         </div>
     </div>
 
-    <div id="history">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h2 style="margin:0; font-size: 18px;">Saved Vault</h2>
-            <span id="vCount" style="background: #2b6fff; padding: 2px 12px; border-radius: 20px; font-size: 11px; font-weight: bold;">0 Items</span>
+    <div id="history-view">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="margin:0; font-size: 18px;">History Log</h2>
+            <span id="h-count" style="background: var(--primary); padding: 2px 12px; border-radius: 20px; font-size: 11px; font-weight: bold;">0 Items</span>
         </div>
-        <div id="historyList"></div>
-        <button onclick="clearVault()" style="background:rgba(255,78,107,0.1); color:#ff4e6b; margin-top:10px; flex-shrink:0;">Clear All Records</button>
+        
+        <div id="history-list"></div>
+
+        <button class="btn-danger" onclick="clearAllHistory()" style="margin-top: 10px; flex-shrink: 0;">Wipe History</button>
     </div>
 </div>
 
-<div class="tabs">
-    <div class="tab active" onclick="showTab('generator',this)">Create</div>
-    <div class="tab" onclick="showTab('history',this)">Vault</div>
+<div class="nav-tabs">
+    <div class="tab-item active" onclick="switchTab('generator', this)">Generator</div>
+    <div class="tab-item" onclick="switchTab('history', this)">History</div>
 </div>
 
 <script>
-let qr;
+let mainQr;
+
 window.onload = function() {
-    qr = new QRCode(document.getElementById("qrcode"), {
-        text: "https://play.google.com/store/apps/dev?id=8894823691230117917",
-        width: 160, height: 160,
-        colorDark: "#000000", colorLight: "#ffffff",
+    // Initial QR setup
+    mainQr = new QRCode(document.getElementById("main-qr-box"), {
+        text: "AminLogic QR",
+        width: 170,
+        height: 170,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
     });
-    updateHistory();
+    renderHistory();
 };
 
-function generateQR() {
-    let val = document.getElementById("qrtext").value;
-    if(val) qr.makeCode(val);
+function generateNow() {
+    const input = document.getElementById("qr-input").value;
+    if (input) {
+        mainQr.makeCode(input);
+    }
 }
 
+function copyInput() {
+    const text = document.getElementById("qr-input").value;
+    if (text) {
+        navigator.clipboard.writeText(text);
+        alert("Text copied to clipboard!");
+    }
+}
+
+/* Capture Mode (Matches Image) */
 function openCapture() {
-    const val = document.getElementById("qrtext").value || "AminLogic QR";
-    const space = document.getElementById("overlay-qr-space");
-    space.innerHTML = "";
-    new QRCode(space, { text: val, width: 240, height: 240, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
-    document.getElementById("capture-overlay").style.display = "flex";
+    const text = document.getElementById("qr-input").value || "AminLogic QR";
+    const target = document.getElementById("capture-qr-target");
+    target.innerHTML = "";
+    
+    new QRCode(target, {
+        text: text,
+        width: 250,
+        height: 250,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+    
+    document.getElementById("capture-view").style.display = "flex";
 }
 
-function closeCapture() { document.getElementById("capture-overlay").style.display = "none"; }
-function copyInput() { let t = document.getElementById("qrtext").value; if(t) { navigator.clipboard.writeText(t); alert("Copied!"); } }
-
-function saveToVault() {
-    let t = document.getElementById("qrtext").value;
-    if(!t) return;
-    let h = JSON.parse(localStorage.getItem("amin_qr") || "[]");
-    h.unshift({ text: t });
-    localStorage.setItem("amin_qr", JSON.stringify(h.slice(0, 10)));
-    updateHistory();
-    alert("Saved to Vault!");
+function closeCapture() {
+    document.getElementById("capture-view").style.display = "none";
 }
 
-function updateHistory() {
-    let list = document.getElementById("historyList");
-    let h = JSON.parse(localStorage.getItem("amin_qr") || "[]");
-    document.getElementById("vCount").innerText = h.length + " Items";
-    list.innerHTML = h.length ? "" : '<p style="text-align:center; opacity:0.3; margin-top:50px;">No saved codes found.</p>';
-    h.forEach((item, i) => {
-        let d = document.createElement("div");
-        d.className = "historyItem";
-        d.innerHTML = `<span class="history-text">${item.text}</span>
-            <div class="btnrow"><button class="btn-gen" onclick="loadHist(${i})" style="padding:6px; font-size:11px;">Generate</button>
-            <button class="btn-sec" onclick="delHist(${i})" style="padding:6px; font-size:11px; color:#ff4e6b;">Delete</button></div>`;
-        list.appendChild(d);
+/* History Logic */
+function saveHistory() {
+    const text = document.getElementById("qr-input").value;
+    if (!text) return;
+
+    let logs = JSON.parse(localStorage.getItem("qr_logs") || "[]");
+    logs.unshift({ text: text, date: new Date().toLocaleDateString() });
+    localStorage.setItem("qr_logs", JSON.stringify(logs.slice(0, 20))); // Keep last 20
+    
+    renderHistory();
+    alert("Saved to History!");
+}
+
+function renderHistory() {
+    const list = document.getElementById("history-list");
+    const logs = JSON.parse(localStorage.getItem("qr_logs") || "[]");
+    document.getElementById("h-count").innerText = logs.length + " Items";
+    
+    list.innerHTML = logs.length ? "" : '<p style="text-align:center; opacity:0.3; margin-top:50px;">No records found.</p>';
+    
+    logs.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML = `
+            <span class="history-content">${item.text}</span>
+            <div class="btn-row">
+                <button class="btn-primary" onclick="loadHistoryItem(${index})" style="padding: 8px; font-size: 12px;">View</button>
+                <button class="btn-ghost" onclick="deleteHistoryItem(${index})" style="padding: 8px; font-size: 12px; color: #ff4e6b;">Delete</button>
+            </div>
+        `;
+        list.appendChild(div);
     });
 }
 
-function loadHist(i) {
-    let h = JSON.parse(localStorage.getItem("amin_qr"));
-    document.getElementById("qrtext").value = h[i].text;
-    qr.makeCode(h[i].text);
-    showTab('generator', document.querySelectorAll('.tab')[0]);
+function loadHistoryItem(index) {
+    const logs = JSON.parse(localStorage.getItem("qr_logs"));
+    document.getElementById("qr-input").value = logs[index].text;
+    mainQr.makeCode(logs[index].text);
+    switchTab('generator', document.querySelectorAll('.tab-item')[0]);
 }
 
-function delHist(i) {
-    let h = JSON.parse(localStorage.getItem("amin_qr"));
-    h.splice(i, 1);
-    localStorage.setItem("amin_qr", JSON.stringify(h));
-    updateHistory();
+function deleteHistoryItem(index) {
+    let logs = JSON.parse(localStorage.getItem("qr_logs"));
+    logs.splice(index, 1);
+    localStorage.setItem("qr_logs", JSON.stringify(logs));
+    renderHistory();
 }
 
-function clearVault() { if(confirm("Clear all?")) { localStorage.removeItem("amin_qr"); updateHistory(); } }
+function clearAllHistory() {
+    if (confirm("Permanently clear all history?")) {
+        localStorage.removeItem("qr_logs");
+        renderHistory();
+    }
+}
 
-function showTab(name, el) {
-    document.getElementById("generator").style.display = (name === 'generator') ? "flex" : "none";
-    document.getElementById("history").style.display = (name === 'history') ? "flex" : "none";
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+/* Tab Navigation */
+function switchTab(tab, el) {
+    document.getElementById("generator-view").style.display = (tab === 'generator') ? "flex" : "none";
+    document.getElementById("history-view").style.display = (tab === 'history') ? "flex" : "none";
+    
+    document.querySelectorAll(".tab-item").forEach(t => t.classList.remove("active"));
     el.classList.add("active");
 }
 </script>
