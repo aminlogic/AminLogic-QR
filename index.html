@@ -28,39 +28,36 @@ flex-direction:column;
 }
 
 .container{
-max-width:450px;
+max-width:500px;
 margin:auto;
-padding:10px;
-padding-bottom:10px;
+padding:18px;
+padding-bottom:100px;
 flex:1;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-height:100vh;
 }
 
 .header{
 display:flex;
 align-items:center;
-gap:10px;
-margin-bottom:10px;
+gap:14px;
+margin-bottom:18px;
 }
 
 .logo{
-width:48px;
-height:48px;
-border-radius:12px;
-box-shadow:0 8px 20px rgba(0,0,0,0.5);
+width:54px;
+height:54px;
+border-radius:16px;
+box-shadow:0 8px 24px rgba(0,0,0,0.5);
 }
 
 .title h1{
 margin:0;
-font-size:20px;
+font-size:22px;
 font-weight:800;
+letter-spacing:-0.5px;
 }
 
 .title span{
-font-size:12px;
+font-size:13px;
 color:#3da3ff;
 font-weight:600;
 text-transform:uppercase;
@@ -69,41 +66,35 @@ letter-spacing:1px;
 
 .card{
 background:var(--card-bg);
-border-radius:20px;
-padding:16px;
-margin-bottom:10px;
+border-radius:24px;
+padding:22px;
+margin-bottom:15px;
 border:1px solid var(--border);
-box-shadow:0 12px 30px rgba(0,0,0,0.4);
+box-shadow:0 15px 35px rgba(0,0,0,0.4);
 backdrop-filter:blur(10px);
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:space-between;
-flex:1;
 }
 
 .card h2{
 margin:0 0 6px 0;
-font-size:18px;
+font-size:19px;
 }
 
 .description{
-font-size:13px;
+font-size:14px;
 color:rgba(255,255,255,0.6);
-margin-bottom:10px;
-line-height:1.4;
-text-align:center;
+margin-bottom:16px;
+line-height:1.5;
 }
 
 textarea{
 width:100%;
 background:rgba(0,0,0,0.4);
 border:1px solid var(--border);
-border-radius:14px;
-padding:12px;
+border-radius:16px;
+padding:16px;
 color:white;
-font-size:14px;
-min-height:80px;
+font-size:15px;
+min-height:100px;
 box-sizing:border-box;
 outline:none;
 resize:none;
@@ -116,9 +107,9 @@ background:rgba(0,0,0,0.5);
 }
 
 .qrbox{
-margin-top:10px;
-padding:18px;
-border-radius:20px;
+margin-top:18px;
+padding:22px;
+border-radius:24px;
 background:white;
 display:flex;
 flex-direction:column;
@@ -128,19 +119,19 @@ justify-content:center;
 
 .branding-tag{
 color:#05070f;
-font-size:11px;
+font-size:12px;
 font-weight:900;
-margin-top:8px;
-letter-spacing:2px;
+margin-top:10px;
+letter-spacing:3px;
 opacity:0.9;
 }
 
 button{
 border:none;
-border-radius:14px;
-padding:12px;
+border-radius:16px;
+padding:14px;
 font-weight:700;
-font-size:13px;
+font-size:14px;
 cursor:pointer;
 flex:1;
 transition:0.2s;
@@ -150,8 +141,8 @@ button:active{transform:scale(0.97);}
 
 .btnrow{
 display:flex;
-gap:8px;
-margin-top:10px;
+gap:10px;
+margin-top:14px;
 }
 
 .generate{background:var(--primary-grad);color:white;}
@@ -159,15 +150,41 @@ margin-top:10px;
 .copy{background:rgba(255,255,255,0.1);color:white;}
 .delete{background:var(--danger-grad);color:white;}
 
+.historyItem{
+background:rgba(255,255,255,0.04);
+padding:18px;
+border-radius:20px;
+margin-bottom:14px;
+border:1px solid var(--border);
+}
+
+.history-meta{
+display:flex;
+justify-content:space-between;
+font-size:12px;
+color:#3da3ff;
+margin-bottom:8px;
+font-weight:600;
+}
+
+.history-text{
+font-size:14px;
+opacity:0.9;
+word-break:break-all;
+line-height:1.4;
+display:block;
+margin-bottom:12px;
+}
+
 .tabs{
 position:fixed;
 bottom:0;
 left:0;
 right:0;
 background:rgba(6,9,18,0.98);
-padding:12px 16px;
+padding:14px 18px;
 display:flex;
-gap:8px;
+gap:12px;
 border-top:1px solid var(--border);
 z-index:100;
 }
@@ -175,8 +192,8 @@ z-index:100;
 .tab{
 flex:1;
 text-align:center;
-padding:12px;
-border-radius:14px;
+padding:14px;
+border-radius:16px;
 background:rgba(255,255,255,0.05);
 cursor:pointer;
 font-weight:700;
@@ -204,10 +221,10 @@ justify-content:center;
 
 .close-overlay{
 position:absolute;
-bottom:40px;
+bottom:50px;
 background:#05070f;
 color:white;
-padding:14px 36px;
+padding:16px 40px;
 border-radius:50px;
 font-weight:bold;
 border:none;
@@ -218,9 +235,9 @@ border:none;
 <body>
 
 <div id="screenshot-overlay">
-<div style="color:#999;margin-bottom:20px;font-weight:bold;letter-spacing:1px;">PREVIEW & CAPTURE</div>
-<div id="overlay-qr-space" style="padding:18px;background:white;"></div>
-<div style="color:#000;margin-top:20px;font-weight:900;letter-spacing:4px;font-size:16px;">AMINLOGIC</div>
+<div style="color:#999;margin-bottom:25px;font-weight:bold;letter-spacing:1px;">PREVIEW & CAPTURE</div>
+<div id="overlay-qr-space" style="padding:20px;background:white;"></div>
+<div style="color:#000;margin-top:25px;font-weight:900;letter-spacing:4px;font-size:16px;">AMINLOGIC</div>
 <button class="close-overlay" onclick="closeCapture()">Return to App</button>
 </div>
 
@@ -234,16 +251,16 @@ border:none;
 </div>
 </div>
 
-<div id="generator" style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+<div id="generator">
 
 <div class="card">
 <h2>Create New Code</h2>
-<p class="description">Generate QR codes from any URL or text instantly.</p>
+<p class="description">Generate QR codes instantly from any website link or plain text message. Perfect for sharing URLs, notes, or digital information.</p>
 
-<textarea id="qrtext" placeholder="Enter URL or text here..."></textarea>
+<textarea id="qrtext" placeholder="Enter a website URL or any text you want to convert into a QR code..."></textarea>
 
 <div class="btnrow">
-<button class="generate" onclick="generateQR()">Generate</button>
+<button class="generate" onclick="generateQR()">Generate Code</button>
 <button class="copy" onclick="copyText()">Copy Input</button>
 </div>
 
@@ -252,7 +269,7 @@ border:none;
 <div class="branding-tag">AMINLOGIC PREMIERE</div>
 </div>
 
-<div class="btnrow">
+<div class="btnrow" style="margin-top:18px;">
 <button class="share" onclick="openCapture()">Capture & Save</button>
 <button class="copy" onclick="saveQR()">Store in History</button>
 </div>
@@ -262,9 +279,22 @@ border:none;
 </div>
 
 <div id="history" style="display:none">
-<h2 style="margin-bottom:10px">History</h2>
-<span id="historyCount" style="background:#216bff;padding:4px 10px;border-radius:18px;font-size:12px;font-weight:bold;">0 Items</span>
-<div id="historyList" style="margin-top:8px"></div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+<h2 style="margin:0">History</h2>
+<span id="historyCount" style="background:#216bff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;">0 Items</span>
+</div>
+
+<div id="historyList"></div>
+
+<div id="emptyHistory" style="text-align:center;padding:60px 20px;opacity:0.4;">
+<p>Your history is empty. Generate and save QR codes to see them here.</p>
+</div>
+
+<div class="btnrow" id="clearBtnRow" style="display:none;margin-top:20px;">
+<button class="delete" onclick="clearHistory()">Clear All History</button>
+</div>
+
 </div>
 
 </div>
@@ -275,12 +305,14 @@ border:none;
 </div>
 
 <script>
+
 let qr;
+
 window.onload=function(){
 qr=new QRCode(document.getElementById("qrcode"),{
 text:"QR Code",
-width:200,
-height:200,
+width:240,
+height:240,
 colorDark:"#000000",
 colorLight:"#ffffff",
 correctLevel:QRCode.CorrectLevel.H
@@ -290,55 +322,155 @@ loadHistory();
 
 function generateQR(){
 let text=document.getElementById("qrtext").value;
-if(!text){alert("Enter a URL or text!");return;}
+if(!text){alert("Please enter a URL or text first.");return;}
 qr.makeCode(text);
 }
 
 function openCapture(){
-const text=document.getElementById("qrtext").value||"QR Code";
+
+const text=document.getElementById("qrtext").value || "QR Code";
+
 const overlaySpace=document.getElementById("overlay-qr-space");
 overlaySpace.innerHTML="";
-new QRCode(overlaySpace,{text:text,width:240,height:240,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});
+
+new QRCode(overlaySpace,{
+text:text,
+width:280,
+height:280,
+colorDark:"#000000",
+colorLight:"#ffffff",
+correctLevel:QRCode.CorrectLevel.H
+});
+
 document.getElementById("screenshot-overlay").style.display="flex";
 }
 
-function closeCapture(){document.getElementById("screenshot-overlay").style.display="none";}
-function copyText(){let text=document.getElementById("qrtext").value;if(!text)return;navigator.clipboard.writeText(text);alert("Copied!");}
+function closeCapture(){
+document.getElementById("screenshot-overlay").style.display="none";
+}
 
-function saveQR(){
+function copyText(){
 let text=document.getElementById("qrtext").value;
 if(!text)return;
+navigator.clipboard.writeText(text);
+alert("Input copied!");
+}
+
+function saveQR(){
+
+let text=document.getElementById("qrtext").value;
+if(!text)return;
+
 let history=JSON.parse(localStorage.getItem("qrhistory")||"[]");
+
 if(history.length>0 && history[0].text===text)return;
-history.unshift({text:text,date:new Date().toLocaleDateString()+" "+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})});
+
+history.unshift({
+text:text,
+date:new Date().toLocaleDateString()+" "+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
+});
+
 localStorage.setItem("qrhistory",JSON.stringify(history.slice(0,30)));
+
 loadHistory();
+
 alert("Saved to History!");
+
 }
 
 function loadHistory(){
+
 let list=document.getElementById("historyList");
+let empty=document.getElementById("emptyHistory");
+let clearBtn=document.getElementById("clearBtnRow");
 let countLabel=document.getElementById("historyCount");
+
 list.innerHTML="";
+
 let history=JSON.parse(localStorage.getItem("qrhistory")||"[]");
+
 countLabel.innerText=history.length+" Items";
-if(history.length>0){
+
+if(history.length===0){
+
+empty.style.display="block";
+clearBtn.style.display="none";
+
+}else{
+
+empty.style.display="none";
+clearBtn.style.display="flex";
+
 history.forEach((item,i)=>{
+
 let div=document.createElement("div");
+
 div.className="historyItem";
-div.innerHTML=`<div class="history-meta"><span>${item.date}</span></div>
-<span class="history-text">${item.text}</span>`;
+
+div.innerHTML=`
+<div class="history-meta"><span>${item.date}</span></div>
+<span class="history-text">${item.text}</span>
+<div class="btnrow">
+<button class="generate" onclick="captureHistory(${i})" style="padding:10px;font-size:12px;">Capture</button>
+<button class="delete" onclick="deleteHistory(${i})" style="padding:10px;font-size:12px;background:rgba(255,78,107,0.1);color:#ff4e6b;">Remove</button>
+</div>`;
+
 list.appendChild(div);
+
 });
+
 }
+
+}
+
+function captureHistory(i){
+
+let history=JSON.parse(localStorage.getItem("qrhistory"));
+
+document.getElementById("qrtext").value=history[i].text;
+
+qr.makeCode(history[i].text);
+
+openCapture();
+
+}
+
+function deleteHistory(i){
+
+let history=JSON.parse(localStorage.getItem("qrhistory"));
+
+history.splice(i,1);
+
+localStorage.setItem("qrhistory",JSON.stringify(history));
+
+loadHistory();
+
+}
+
+function clearHistory(){
+
+if(confirm("Clear all history records?")){
+
+localStorage.removeItem("qrhistory");
+
+loadHistory();
+
+}
+
 }
 
 function openTab(name,el){
-document.getElementById("generator").style.display=(name==='generator')?"flex":"none";
+
+document.getElementById("generator").style.display=(name==='generator')?"block":"none";
+
 document.getElementById("history").style.display=(name==='history')?"block":"none";
+
 document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+
 el.classList.add("active");
+
 }
+
 </script>
 
 </body>
